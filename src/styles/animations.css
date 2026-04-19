@@ -1,0 +1,74 @@
+/* animations.css — Site-wide animation & transition styles */
+
+/* ─── Page load & scroll reveal (motion-safe only) ─────────── */
+@media (prefers-reduced-motion: no-preference) {
+  /* Applied only on very first page load via .first-load on <html> */
+  .first-load .animate-on-load {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+  .first-load .animate-on-load.is-visible { opacity: 1; transform: none; }
+
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.65s ease-out, transform 0.65s ease-out;
+  }
+  .scroll-reveal.is-visible { opacity: 1; transform: none; }
+
+  /* ─── View Transitions ─────────────────────────────────────── */
+  /* Root swaps instantly — header/footer stay stable */
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  @keyframes page-exit {
+    to { opacity: 0; transform: translateY(-8px); }
+  }
+  @keyframes page-enter {
+    from { opacity: 0; transform: translateY(12px); }
+  }
+  ::view-transition-old(page-content) {
+    animation: page-exit 0.3s ease-in forwards;
+  }
+  ::view-transition-new(page-content) {
+    animation: page-enter 0.45s ease-out forwards;
+  }
+
+  /* ─── Button lift ──────────────────────────────────────────── */
+  .btn-lift {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out,
+                background-color 0.2s ease-out, color 0.2s ease-out,
+                border-color 0.2s ease-out;
+  }
+  .btn-lift:hover  { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(74,64,64,0.15); }
+  .btn-lift:active { transform: translateY(0); transition-duration: 0.1s; }
+
+  /* ─── Gallery card hover ───────────────────────────────────── */
+  .gallery-card { transition: transform 0.25s ease-out, box-shadow 0.25s ease-out; }
+  .gallery-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(74,64,64,0.12); }
+  .gallery-card .carousel-prev,
+  .gallery-card .carousel-next { opacity: 0.7; transition: opacity 0.2s ease; }
+  .gallery-card:hover .carousel-prev,
+  .gallery-card:hover .carousel-next { opacity: 1; }
+}
+
+/* ─── Nav underline — applies always; reduced-motion: instant ── */
+.nav-ul-link { position: relative; }
+.nav-ul-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #A89BAE;
+  transition: width 0.25s ease;
+}
+.nav-ul-link:hover::after,
+.nav-ul-link.nav-active::after { width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-ul-link::after { transition: none; }
+}

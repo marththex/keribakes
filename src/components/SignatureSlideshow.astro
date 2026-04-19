@@ -1,0 +1,220 @@
+---
+const images = [
+  '/images/gallery/tres-leches-cake/main.jpg',
+  '/images/gallery/tres-leches-cake/detail-1.jpg',
+  '/images/gallery/tres-leches-cake/detail-2.jpg',
+  '/images/gallery/tres-leches-cake/detail-3.jpg',
+  '/images/gallery/tres-leches-cupcakes/main.jpg',
+  '/images/gallery/tres-leches-cupcakes/detail-1.jpg',
+  '/images/gallery/tres-leches-cupcakes/detail-2.jpg',
+  '/images/gallery/tres-leches-cupcakes/detail-3.jpg',
+  '/images/gallery/cheesecake-cupcakes/main.jpg',
+  '/images/gallery/cheesecake-cupcakes/detail-1.jpg',
+  '/images/gallery/cheesecake-cupcakes/detail-2.jpg',
+  '/images/gallery/cheesecake-cupcakes/detail-3.jpg',
+];
+---
+
+<div id="sig-show" class="sig-wrapper">
+  <!-- Photo stack -->
+  {images.map((src, i) => (
+    <img
+      src={src}
+      alt=""
+      class="sig-slide"
+      data-sig-slide
+      data-idx={i}
+      loading="eager"
+      decoding="async"
+      aria-hidden="true"
+    />
+  ))}
+
+  <!-- Bottom gradient so text stays readable -->
+  <div class="sig-gradient" aria-hidden="true" />
+
+  <!-- Text overlay -->
+  <div class="sig-text">
+    <p class="sig-label">Signature Collection</p>
+    <h2 class="sig-title">Made with Heart</h2>
+    <p class="sig-body">
+      Every cake starts with the same ingredient&nbsp;— love.
+      Baked from scratch, made to order, and meant to make
+      your moment a little sweeter.
+    </p>
+  </div>
+</div>
+
+<style>
+  .sig-wrapper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .sig-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    z-index: 1;
+    transform: none;
+    filter: brightness(1.05) contrast(1.08) saturate(1.1);
+  }
+
+  .sig-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgba(74, 64, 64, 0.72) 0%,
+      rgba(74, 64, 64, 0.25) 40%,
+      transparent 70%
+    );
+  }
+
+  .sig-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 11;
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .sig-label {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fdfaf7;
+    text-shadow: 0 1px 8px rgba(74, 64, 64, 0.5);
+    margin: 0 0 0.4rem;
+  }
+
+  .sig-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.625rem;
+    color: #fdfaf7;
+    text-shadow: 0 2px 12px rgba(74, 64, 64, 0.6);
+    margin: 0 0 0.5rem;
+  }
+
+  .sig-body {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.8125rem;
+    color: rgba(253, 250, 247, 0.92);
+    text-shadow: 0 1px 8px rgba(74, 64, 64, 0.5);
+    line-height: 1.65;
+    margin: 0;
+  }
+</style>
+
+<script>
+  const DISPLAY_MS    = 3500;
+  const TRANSITION_MS = 1000;
+  const TYPES = ['crossfade', 'slide-left', 'slide-up', 'zoom-fade'] as const;
+  type TType = (typeof TYPES)[number];
+
+  function shuffle(arr: number[]): number[] {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // Module-level cancel flag — set true to stop any running cycle
+  let cancelled = true;
+
+  document.addEventListener('astro:page-load', () => {
+    cancelled = true; // stop any previous cycle
+
+    const container = document.getElementById('sig-show');
+    if (!container) return; // not on the home page
+
+    const slides = Array.from(container.querySelectorAll<HTMLElement>('[data-sig-slide]'));
+    if (slides.length === 0) return;
+
+    // Preload all images eagerly
+    slides.forEach(el => {
+      const img = el as HTMLImageElement;
+      if (!img.complete) { const p = new Image(); p.src = img.src; }
+    });
+
+    // Reset every slide to base state
+    slides.forEach(el => {
+      el.style.transition = 'none';
+      el.style.opacity    = '0';
+      el.style.zIndex     = '1';
+      el.style.transform  = 'none';
+    });
+
+    let order = shuffle(slides.map((_, i) => i));
+    let pos   = 0;
+
+    // Show first slide
+    slides[order[0]].style.opacity = '1';
+    slides[order[0]].style.zIndex  = '2';
+
+    function transitionTo(currentEl: HTMLElement, nextEl: HTMLElement): void {
+      const type: TType = TYPES[Math.floor(Math.random() * TYPES.length)];
+      const tp = `opacity ${TRANSITION_MS}ms ease, transform ${TRANSITION_MS}ms ease`;
+
+      nextEl.style.transition = 'none';
+      nextEl.style.opacity    = '0';
+      nextEl.style.zIndex     = '3';
+      nextEl.style.transform  =
+        type === 'slide-left' ? 'translateX(100%)' :
+        type === 'slide-up'   ? 'translateY(100%)' :
+        type === 'zoom-fade'  ? 'scale(0.96)'      : 'none';
+
+      void nextEl.getBoundingClientRect(); // force reflow
+
+      nextEl.style.transition = tp;
+      nextEl.style.opacity    = '1';
+      nextEl.style.transform  = 'none';
+
+      currentEl.style.transition = tp;
+      currentEl.style.opacity    = '0';
+      if (type === 'zoom-fade') currentEl.style.transform = 'scale(1.06)';
+
+      setTimeout(() => {
+        currentEl.style.transition = 'none';
+        currentEl.style.zIndex     = '1';
+        currentEl.style.transform  = 'none';
+        nextEl.style.zIndex        = '2';
+      }, TRANSITION_MS + 50);
+    }
+
+    function advance(): void {
+      const currentIdx = order[pos];
+      pos++;
+      if (pos >= order.length) {
+        let next = shuffle(slides.map((_, i) => i));
+        if (next[0] === currentIdx && next.length > 1) [next[0], next[1]] = [next[1], next[0]];
+        order = next;
+        pos = 0;
+      }
+      transitionTo(slides[currentIdx], slides[order[pos]]);
+    }
+
+    cancelled = false;
+
+    setTimeout(function cycle() {
+      if (cancelled) return;
+      advance();
+      setTimeout(cycle, DISPLAY_MS + TRANSITION_MS);
+    }, DISPLAY_MS);
+  });
+</script>

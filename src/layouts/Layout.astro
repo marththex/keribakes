@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import '../styles/animations.css';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
@@ -29,6 +31,16 @@ const currentPath = Astro.url.pathname;
     <meta name="description" content={description} />
     <title>{title}</title>
 
+    <!-- First-load detection (must be inline, not a module) -->
+    <script>
+      if (!sessionStorage.getItem('keri-first-loaded')) {
+        document.documentElement.classList.add('first-load');
+        sessionStorage.setItem('keri-first-loaded', '1');
+      }
+    </script>
+
+    <ClientRouter />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,7 +53,7 @@ const currentPath = Astro.url.pathname;
   <body class="min-h-screen flex flex-col bg-cream text-charcoal">
 
     <!-- Sticky Nav -->
-    <header class="sticky top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-blush/40">
+    <header class="sticky top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-blush/40 animate-on-load">
       <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <!-- Logo -->
         <a
@@ -59,10 +71,10 @@ const currentPath = Astro.url.pathname;
               <a
                 href={link.href}
                 class={[
-                  'text-sm font-body tracking-widest uppercase transition-colors duration-300',
+                  'nav-ul-link text-sm font-body tracking-widest uppercase transition-colors duration-200',
                   currentPath === link.href
-                    ? 'text-mauve border-b border-mauve pb-0.5'
-                    : 'text-charcoal/70 hover:text-charcoal',
+                    ? 'text-mauve nav-active'
+                    : 'text-charcoal/70 hover:text-mauve',
                 ].join(' ')}
                 style="font-family: var(--font-body); font-weight: 300; letter-spacing: 0.12em;"
               >
@@ -90,7 +102,7 @@ const currentPath = Astro.url.pathname;
     </header>
 
     <!-- Page content -->
-    <main class="flex-1">
+    <main class="flex-1" transition:name="page-content">
       <slot />
     </main>
 
@@ -130,3 +142,27 @@ const currentPath = Astro.url.pathname;
 
   </body>
 </html>
+
+<script>
+  // Stagger animate-on-load elements on first visit
+  document.addEventListener('astro:page-load', () => {
+    const items = Array.from(document.querySelectorAll<HTMLElement>('.animate-on-load'));
+    items.forEach((el, i) => {
+      setTimeout(() => el.classList.add('is-visible'), i * 120);
+    });
+
+    // Scroll-triggered reveals
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+  });
+</script>

@@ -128,7 +128,6 @@ const { name, price, description, allImages } = Astro.props;
     card.querySelector('.carousel-next')?.addEventListener('click', () => goTo(current + 1));
     dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
 
-    // Touch swipe support
     const carousel = card.querySelector<HTMLElement>('[data-carousel]');
     if (!carousel) return;
     let touchStartX = 0;
@@ -141,5 +140,9 @@ const { name, price, description, allImages } = Astro.props;
     }, { passive: true });
   }
 
-  document.querySelectorAll('.gallery-card').forEach(initCarousel);
+  function initAllCarousels(): void {
+    document.querySelectorAll('.gallery-card').forEach(initCarousel);
+  }
+
+  document.addEventListener('astro:page-load', initAllCarousels);
 </script>

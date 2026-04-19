@@ -144,6 +144,20 @@ See `.env.example` for the template.
 - Build: `astro build` → docker build → push to NAS
 - Cloudflare Tunnel hostname maps to container port 4321
 
+## Animations & Transitions
+All animation styles live in `src/styles/animations.css` (imported by Layout.astro). All animation JS lives in a `<script>` block at the bottom of Layout.astro, bound to `astro:page-load`.
+
+**Classes:**
+- `.animate-on-load` — elements that fade+slide up on initial page load; only hidden on true first visit (gated by `.first-load` on `<html>`, set via `sessionStorage`)
+- `.scroll-reveal` — elements that fade+slide up when scrolled into view (IntersectionObserver, threshold 0.12)
+- `.btn-lift` — micro-interaction: lift + shadow on hover; back on active
+- `.nav-ul-link` + `.nav-active` — underline slide-in on hover/active nav links
+- `.gallery-card` hover — lift + shadow; arrow opacity reveals
+
+**View Transitions:** Astro `<ViewTransitions />` is active. Root transition is suppressed (header/nav stay stable). Only `<main transition:name="page-content">` animates with `page-exit` (0.3s) / `page-enter` (0.45s) keyframes. All slideshow components bind to `astro:page-load` and cancel/reinit on each navigation.
+
+**Reduced motion:** All motion-dependent styles are inside `@media (prefers-reduced-motion: no-preference)`. Nav underline gets `transition: none` under `prefers-reduced-motion: reduce`.
+
 ## Code Conventions
 - TypeScript strict mode — no `any` types
 - All form data typed and validated with Zod v4 schemas

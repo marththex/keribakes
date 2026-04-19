@@ -93,13 +93,18 @@ const photos = [
 
 <script>
   const INTERVAL = 4000;
+  let profileTimer: ReturnType<typeof setInterval> | undefined;
 
-  const track  = document.getElementById('slideshow-track');
-  if (track) {
+  document.addEventListener('astro:page-load', () => {
+    clearInterval(profileTimer);
+    profileTimer = undefined;
+
+    const track = document.getElementById('slideshow-track');
+    if (!track) return;
+
     const slides = Array.from(track.querySelectorAll<HTMLImageElement>('.slideshow-slide'));
     const dots   = Array.from(document.querySelectorAll<HTMLButtonElement>('.dot'));
     let current  = 0;
-    let timer: ReturnType<typeof setInterval>;
 
     function goTo(index: number) {
       slides[current].classList.remove('is-active');
@@ -111,13 +116,14 @@ const photos = [
 
     function next() { goTo(current + 1); }
 
-    function startTimer() { timer = setInterval(next, INTERVAL); }
-    function stopTimer()  { clearInterval(timer); }
-
     dots.forEach((dot, i) => {
-      dot.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); });
+      dot.addEventListener('click', () => {
+        clearInterval(profileTimer);
+        goTo(i);
+        profileTimer = setInterval(next, INTERVAL);
+      });
     });
 
-    startTimer();
-  }
+    profileTimer = setInterval(next, INTERVAL);
+  });
 </script>

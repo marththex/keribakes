@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SignatureSlideshow from '../components/SignatureSlideshow.astro';
 ---
 
 <Layout title="Keri Bakes — Custom Celebration Cakes">
@@ -9,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="grid grid-cols-1 md:grid-cols-3 gap-0 min-h-[520px]">
 
       <!-- Left: tagline + CTA -->
-      <div class="flex flex-col justify-center gap-6 py-12 pr-8">
+      <div class="flex flex-col justify-center gap-6 py-12 pr-8 animate-on-load">
         <p
           class="text-xs tracking-[0.2em] uppercase text-mauve"
           style="font-family: var(--font-body); font-weight: 200;"
@@ -25,51 +26,21 @@ import Layout from '../layouts/Layout.astro';
         </h1>
         <a
           href="/gallery"
-          class="self-start text-xs tracking-[0.2em] uppercase border border-charcoal/40 text-charcoal/80 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
+          class="btn-lift self-start text-xs tracking-[0.2em] uppercase border border-charcoal/40 text-charcoal/80 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
           style="font-family: var(--font-body); font-weight: 300;"
         >
           View Gallery
         </a>
       </div>
 
-      <!-- Center: decorative element + callout -->
-      <div class="relative flex flex-col items-center justify-center bg-sand/20 py-12 px-6">
-        <!-- Decorative circle -->
-        <div class="w-48 h-48 rounded-full bg-blush/50 mb-8 flex items-center justify-center shadow-sm">
-          <div class="w-36 h-36 rounded-full bg-cream/80 flex items-center justify-center">
-            <span
-              class="text-4xl text-charcoal/30 select-none"
-              aria-hidden="true"
-            >
-              ✦
-            </span>
-          </div>
-        </div>
-        <p
-          class="text-xs tracking-[0.18em] uppercase text-mauve mb-2"
-          style="font-family: var(--font-body); font-weight: 300;"
-        >
-          Signature Collection
-        </p>
-        <h2
-          class="text-2xl text-center text-charcoal"
-          style="font-family: var(--font-display); font-weight: 400;"
-        >
-          Made with Heart
-        </h2>
-        <p
-          class="mt-3 text-center text-sm leading-relaxed"
-          style="font-family: var(--font-body); font-weight: 300; color: #7A6E6E;"
-        >
-          Every cake starts with the same ingredient — love.
-          Baked from scratch, made to order, and meant to make
-          your moment a little sweeter.
-        </p>
+      <!-- Center: photo slideshow -->
+      <div class="relative overflow-hidden bg-sand/20 min-h-[300px]">
+        <SignatureSlideshow />
       </div>
 
       <!-- Right: gradient + Order CTA -->
       <div
-        class="flex flex-col items-center justify-center py-12 px-8 text-center"
+        class="flex flex-col items-center justify-center py-12 px-8 text-center animate-on-load"
         style="background: linear-gradient(160deg, #C4B8C8 0%, #D9C5C0 100%);"
       >
         <p
@@ -86,7 +57,7 @@ import Layout from '../layouts/Layout.astro';
         </h2>
         <a
           href="/order"
-          class="bg-charcoal text-cream text-xs tracking-[0.2em] uppercase px-8 py-3 hover:bg-mauve transition-all duration-300"
+          class="btn-lift bg-charcoal text-cream text-xs tracking-[0.2em] uppercase px-8 py-3 hover:bg-mauve transition-all duration-300"
           style="font-family: var(--font-body); font-weight: 300;"
         >
           Order Now
@@ -106,7 +77,7 @@ import Layout from '../layouts/Layout.astro';
   <section class="border-t border-blush/40 bg-cream">
     <div class="max-w-2xl mx-auto px-6 py-20 md:py-24 text-center flex flex-col items-center gap-8">
       <p
-        class="text-2xl md:text-3xl text-charcoal leading-relaxed"
+        class="scroll-reveal text-2xl md:text-3xl text-charcoal leading-relaxed"
         style="font-family: var(--font-display); font-weight: 300; font-style: italic;"
       >
         Baking isn't just something I do — it's how I show love. Every cake

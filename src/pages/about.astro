@@ -12,7 +12,7 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
 
     <!-- Section label -->
     <p
-      class="text-xs tracking-[0.2em] uppercase text-mauve mb-12 text-center"
+      class="animate-on-load text-xs tracking-[0.2em] uppercase text-mauve mb-12 text-center"
       style="font-family: var(--font-body); font-weight: 200;"
     >
       The Baker
@@ -22,14 +22,14 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
 
       <!-- Left: photo slideshow -->
-      <div class="flex flex-col gap-4">
+      <div class="animate-on-load flex flex-col gap-4">
         <ProfileSlideshow />
         <!-- Accent bar -->
         <div class="h-0.5 w-16 bg-mauve/40 ml-1"></div>
       </div>
 
       <!-- Right: story text -->
-      <div class="flex flex-col gap-8 pt-2">
+      <div class="animate-on-load flex flex-col gap-8 pt-2">
         <h1
           class="text-5xl md:text-6xl leading-tight text-charcoal"
           style="font-family: var(--font-display); font-weight: 300;"
@@ -79,7 +79,7 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
         <div class="pt-4 flex flex-col gap-4">
           <a
             href="/order"
-            class="inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
+            class="btn-lift inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
             style="font-family: var(--font-body); font-weight: 300;"
           >
             Order a Cake

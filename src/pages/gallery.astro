@@ -47,7 +47,7 @@ const products = [
   <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
 
     <!-- Header -->
-    <div class="mb-10 text-center">
+    <div class="animate-on-load mb-10 text-center">
       <p
         class="text-xs tracking-[0.2em] uppercase text-mauve mb-4"
         style="font-family: var(--font-body); font-weight: 200;"
@@ -66,7 +66,7 @@ const products = [
     <div class="flex flex-col items-end gap-2 mb-10">
       <a
         href="/order"
-        class="text-xs tracking-[0.2em] uppercase bg-charcoal text-cream hover:bg-mauve px-8 py-3 transition-colors duration-300"
+        class="btn-lift text-xs tracking-[0.2em] uppercase bg-charcoal text-cream hover:bg-mauve px-8 py-3 transition-colors duration-300"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         Order Now
@@ -84,7 +84,7 @@ const products = [
     </div>
 
     <!-- 3-card grid — one card per cake -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="scroll-reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {products.map(product => (
         <CakeGalleryCard
           name={product.name}
@@ -105,7 +105,7 @@ const products = [
       </p>
       <a
         href="/order"
-        class="inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/40 text-charcoal/80 hover:border-mauve hover:text-mauve px-8 py-3 transition-all duration-300"
+        class="btn-lift inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/40 text-charcoal/80 hover:border-mauve hover:text-mauve px-8 py-3 transition-all duration-300"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         Place an Order
