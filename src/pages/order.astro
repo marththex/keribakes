@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { CAKE_OPTIONS } from '../lib/orderSchema';
+import { CAKE_OPTIONS, TIME_SLOTS, REFERRAL_OPTIONS } from '../lib/orderSchema';
 
 // Minimum date (server-side, for setting the <input min> attribute)
 const minDate = new Date();
@@ -121,24 +121,35 @@ const minDateStr = minDate.toISOString().split('T')[0];
           Date &amp; Fulfillment
         </legend>
 
-        <div class="flex flex-col gap-1">
-          <label for="requestedDate" class="form-label">
-            Requested Date *
-            <span
-              class="ml-2 text-charcoal/60 normal-case tracking-normal"
-              style="font-size: 11px;"
-            >
-              (minimum 7 days from today)
-            </span>
-          </label>
-          <input
-            id="requestedDate"
-            name="requestedDate"
-            type="date"
-            min={minDateStr}
-            class="form-input"
-          />
-          <p class="form-error hidden" data-error="requestedDate"></p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div class="flex flex-col gap-1">
+            <label for="requestedDate" class="form-label">
+              Requested Date *
+              <span
+                class="ml-2 text-charcoal/60 normal-case tracking-normal"
+                style="font-size: 11px;"
+              >
+                (min. 7 days from today)
+              </span>
+            </label>
+            <input
+              id="requestedDate"
+              name="requestedDate"
+              type="date"
+              min={minDateStr}
+              class="form-input"
+            />
+            <p class="form-error hidden" data-error="requestedDate"></p>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="preferredTime" class="form-label">Preferred Time *</label>
+            <select id="preferredTime" name="preferredTime" class="form-input">
+              <option value="">Select a time</option>
+              {TIME_SLOTS.map(t => <option value={t}>{t}</option>)}
+            </select>
+            <p class="form-error hidden" data-error="preferredTime"></p>
+          </div>
         </div>
 
         <div class="flex gap-6">
@@ -197,12 +208,21 @@ const minDateStr = minDate.toISOString().split('T')[0];
         >
           Optional
         </legend>
-        <label for="referral" class="form-label">
-          How did you hear about me?
-        </label>
-        <input id="referral" name="referral" type="text"
-          class="form-input"
-          placeholder="Instagram, a friend, Google…" />
+        <label for="referral" class="form-label">How did you hear about me?</label>
+        <select id="referral" name="referral" class="form-input">
+          <option value="">Select an option…</option>
+          {REFERRAL_OPTIONS.map(opt => <option value={opt}>{opt}</option>)}
+        </select>
+        <div id="referral-other-wrapper" class="hidden flex flex-col gap-1 mt-1">
+          <input
+            id="referralOther"
+            name="referralOther"
+            type="text"
+            class="form-input"
+            placeholder="Please tell us how you heard about us"
+          />
+          <p class="form-error hidden" data-error="referralOther"></p>
+        </div>
       </fieldset>
 
       <!-- Global server error -->
@@ -340,10 +360,10 @@ const minDateStr = minDate.toISOString().split('T')[0];
   import { z } from 'zod';
   import { orderSchema } from '../lib/orderSchema';
 
-  const form        = document.getElementById('order-form')     as HTMLFormElement;
-  const submitBtn   = document.getElementById('submit-btn')     as HTMLButtonElement;
-  const successMsg  = document.getElementById('success-msg')    as HTMLElement;
-  const serverErr   = document.getElementById('server-error')   as HTMLElement;
+  const form        = document.getElementById('order-form')      as HTMLFormElement;
+  const submitBtn   = document.getElementById('submit-btn')      as HTMLButtonElement;
+  const successMsg  = document.getElementById('success-msg')     as HTMLElement;
+  const serverErr   = document.getElementById('server-error')    as HTMLElement;
   const delivFields = document.getElementById('delivery-fields') as HTMLElement;
 
   // ── Delivery toggle ─────────────────────────────────────────
@@ -352,6 +372,14 @@ const minDateStr = minDate.toISOString().split('T')[0];
     const isDelivery = (form.elements.namedItem('fulfillment') as RadioNodeList).value === 'delivery';
     delivFields.classList.toggle('hidden', !isDelivery);
   }));
+
+  // ── Referral "Other" toggle ──────────────────────────────────
+  const referralSelect       = form.querySelector<HTMLSelectElement>('#referral');
+  const referralOtherWrapper = document.getElementById('referral-other-wrapper') as HTMLElement;
+  referralSelect?.addEventListener('change', () => {
+    const isOther = referralSelect.value === 'Other';
+    referralOtherWrapper.classList.toggle('hidden', !isOther);
+  });
 
   // ── Helpers ─────────────────────────────────────────────────
   function showError(field: string, msg: string) {
@@ -375,15 +403,17 @@ const minDateStr = minDate.toISOString().split('T')[0];
   function collectData(): Record<string, unknown> {
     const fd = new FormData(form);
     return {
-      name:           fd.get('name'),
-      email:          fd.get('email'),
-      phone:          fd.get('phone'),
-      cakeSelection:  fd.get('cakeSelection'),
-      requestedDate:  fd.get('requestedDate'),
-      fulfillment:    fd.get('fulfillment'),
-      county:         fd.get('county')  ?? undefined,
-      address:        fd.get('address') ?? undefined,
-      referral:       fd.get('referral') ?? undefined,
+      name:          fd.get('name'),
+      email:         fd.get('email'),
+      phone:         fd.get('phone'),
+      cakeSelection: fd.get('cakeSelection'),
+      preferredTime: fd.get('preferredTime'),
+      requestedDate: fd.get('requestedDate'),
+      fulfillment:   fd.get('fulfillment'),
+      county:        fd.get('county')        ?? undefined,
+      address:       fd.get('address')       ?? undefined,
+      referral:      fd.get('referral')      ?? undefined,
+      referralOther: fd.get('referralOther') ?? undefined,
     };
   }
 

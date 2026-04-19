@@ -6,6 +6,11 @@ export function ownerNotificationHtml(data: OrderFormData): string {
       ? `Delivery → ${data.county}${data.address ? ` / ${data.address}` : ''}`
       : 'Pickup';
 
+  const referralDisplay =
+    data.referral === 'Other'
+      ? (data.referralOther ?? 'Other')
+      : (data.referral ?? '');
+
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -38,8 +43,9 @@ export function ownerNotificationHtml(data: OrderFormData): string {
         <tr><td>Phone</td><td>${escHtml(data.phone)}</td></tr>
         <tr><td>Cake</td><td>${escHtml(data.cakeSelection)}</td></tr>
         <tr><td>Requested Date</td><td>${escHtml(data.requestedDate)}</td></tr>
+        <tr><td>Preferred Time</td><td>${escHtml(data.preferredTime)}</td></tr>
         <tr><td>Fulfillment</td><td>${escHtml(fulfillmentDetail)}</td></tr>
-        ${data.referral ? `<tr><td>Referral</td><td>${escHtml(data.referral)}</td></tr>` : ''}
+        ${referralDisplay ? `<tr><td>Referral</td><td>${escHtml(referralDisplay)}</td></tr>` : ''}
       </table>
     </div>
   </div>

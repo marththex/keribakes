@@ -19,6 +19,24 @@ export const CAKE_OPTIONS = [
 ] as const;
 export type CakeOption = (typeof CAKE_OPTIONS)[number];
 
+export const TIME_SLOTS = [
+  '10:00 AM', '11:00 AM', '12:00 PM',
+  '1:00 PM',  '2:00 PM',  '3:00 PM',
+  '4:00 PM',  '5:00 PM',  '6:00 PM',
+] as const;
+export type TimeSlot = (typeof TIME_SLOTS)[number];
+
+export const REFERRAL_OPTIONS = [
+  'Instagram',
+  'Facebook',
+  'Word of mouth',
+  'Google Search',
+  'TikTok',
+  'Referred by a friend',
+  'Other',
+] as const;
+export type ReferralOption = (typeof REFERRAL_OPTIONS)[number];
+
 export const orderSchema = z
   .object({
     name: z.string().min(1, 'Name is required'),
@@ -28,6 +46,7 @@ export const orderSchema = z
       .min(7, 'Enter a valid phone number')
       .regex(/^[\d\s\-()+]+$/, 'Enter a valid phone number'),
     cakeSelection: z.enum(CAKE_OPTIONS, { error: 'Please select a cake' }),
+    preferredTime: z.string().min(1, 'Please select a preferred time'),
     requestedDate: z
       .string()
       .min(1, 'Please choose a date')
@@ -39,6 +58,7 @@ export const orderSchema = z
     county: z.string().optional(),
     address: z.string().optional(),
     referral: z.string().optional(),
+    referralOther: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.fulfillment === 'delivery') {
@@ -56,6 +76,16 @@ export const orderSchema = z
           message: 'Full delivery address is required',
         });
       }
+    }
+    if (
+      data.referral === 'Other' &&
+      (!data.referralOther || data.referralOther.trim().length === 0)
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['referralOther'],
+        message: 'Please tell us how you heard about us',
+      });
     }
   });
 

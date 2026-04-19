@@ -7,7 +7,6 @@ const products = [
     name: 'Tres Leches Cake',
     price: 'From $65',
     description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
-    mainImage: '/images/gallery/tres-leches-cake/main.jpg',
     allImages: [
       '/images/gallery/tres-leches-cake/main.jpg',
       '/images/gallery/tres-leches-cake/detail-1.jpg',
@@ -19,7 +18,6 @@ const products = [
     name: 'Tres Leches Cupcakes',
     price: 'From $48 / dozen',
     description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
-    mainImage: '/images/gallery/tres-leches-cupcakes/main.jpg',
     allImages: [
       '/images/gallery/tres-leches-cupcakes/main.jpg',
       '/images/gallery/tres-leches-cupcakes/detail-1.jpg',
@@ -31,7 +29,6 @@ const products = [
     name: 'Cheesecake Cupcakes',
     price: 'From $48 / dozen',
     description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
-    mainImage: '/images/gallery/cheesecake-cupcakes/main.jpg',
     allImages: [
       '/images/gallery/cheesecake-cupcakes/main.jpg',
       '/images/gallery/cheesecake-cupcakes/detail-1.jpg',
@@ -66,13 +63,23 @@ const products = [
     </div>
 
     <!-- Order CTA — top, right-aligned -->
-    <div class="flex justify-end mb-10">
+    <div class="flex flex-col items-end gap-2 mb-10">
       <a
         href="/order"
         class="text-xs tracking-[0.2em] uppercase bg-charcoal text-cream hover:bg-mauve px-8 py-3 transition-colors duration-300"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         Order Now
+      </a>
+      <a
+        href="https://www.instagram.com/keribakesoc/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center gap-1.5 text-xs text-mauve/70 hover:text-mauve transition-colors duration-300"
+        style="font-family: var(--font-body); font-weight: 300;"
+      >
+        See more on Instagram →
+        <span class="font-normal">@keribakesoc</span>
       </a>
     </div>
 
@@ -83,7 +90,6 @@ const products = [
           name={product.name}
           price={product.price}
           description={product.description}
-          mainImage={product.mainImage}
           allImages={product.allImages}
         />
       ))}

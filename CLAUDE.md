@@ -4,6 +4,10 @@
 This is the website for a personal cake baking side business.
 Owner: Keri Zhong | Domain: keribakes.com
 
+## Business Info
+  Instagram: @keribakesoc
+  URL: https://www.instagram.com/keribakesoc/
+
 ## Stack
 - Framework: Astro 6 with TypeScript (strict mode)
 - Styling: Tailwind CSS v4 (CSS-first config via `@theme` in `src/styles/global.css`)
@@ -46,21 +50,26 @@ order form dropdown. The gallery also reflects only these three products.
 
 ## Order Form Spec (ENFORCE STRICTLY)
 1. Requested date must be >= 7 days from today (client + server)
-2. Delivery only available in Orange County and Los Angeles County
-3. Pickup: no address needed
-4. Delivery: county dropdown (OC/LA only) + full address required
-5. Cake selection is required — must be one of the three offerings above
-6. Add-ons & Special Requests is OPTIONAL free-text (fruits, candles, organic
+2. Preferred Time is required — dropdown with 1-hour slots 10:00 AM–6:00 PM
+   (defined in `TIME_SLOTS` export in `orderSchema.ts`)
+3. Delivery only available in Orange County and Los Angeles County
+4. Pickup: no address needed
+5. Delivery: county dropdown (OC/LA only) + full address required
+6. Cake selection is required — must be one of the three offerings above
+7. Add-ons & Special Requests is OPTIONAL free-text (fruits, candles, organic
    ingredients, decorations, etc.) — never block submission if empty
-7. Sweetness cannot be adjusted — this is a non-negotiable business rule;
+8. Sweetness cannot be adjusted — this is a non-negotiable business rule;
    do not add a sweetness field or imply it can be changed anywhere on the site
-8. Final price depends on add-ons selected — a note to this effect appears
+9. Final price depends on add-ons selected — a note to this effect appears
    below the cake dropdown on the order form
-9. On submit: validate server-side first, then call Resend
-10. Send TWO emails via Resend:
+10. How Did You Hear: dropdown (Instagram / Facebook / Word of mouth / Google Search /
+    TikTok / Referred by a friend / Other); selecting "Other" reveals a text input
+    (required only when Other is selected) — field names: `referral` + `referralOther`
+11. On submit: validate server-side first, then call Resend
+12. Send TWO emails via Resend:
     - Customer: confirmation (24-48hr response time message)
     - Owner: full inquiry details to real inbox
-11. Never expose real owner email in any client-side code or response
+13. Never expose real owner email in any client-side code or response
 
 ## Content Rules
 These rules are standing constraints. Do not reintroduce any of the following:
@@ -88,14 +97,21 @@ All real photos are now live. Images are stored in `public/images/` and served s
   - `tres-leches-cupcakes/`
   - `cheesecake-cupcakes/`
 
+## Gallery Behavior
+- In-card left/right arrow navigation — no lightbox, photos stay within the card
+- 4 photos per cake card: `main.jpg` → `detail-1.jpg` → `detail-2.jpg` → `detail-3.jpg`
+- Arrows wrap around (last → first, first → last); swipe supported on mobile
+- Active dot indicators: filled dot = current photo, outlined = others
+- CSS filter on all images: `brightness(1.05) contrast(1.08) saturate(1.1)` for consistent tone
+- Warm overlay via `::after` pseudo-element on `.img-wrapper` (rgba(255,245,235,0.08), multiply)
+- To add more photos: add `detail-4.jpg` etc. and append to `allImages` in `gallery.astro`
+
 **How the gallery is structured (`src/pages/gallery.astro` + `src/components/CakeGalleryCard.astro`):**
-- Gallery page shows exactly **3 cards** — one per cake, displaying only `main.jpg`
-- Each card shows: name, price, description, and 4 dot indicators (mauve/blush) signalling more photos
-- Clicking a card opens a **PhotoSwipe 5 lightbox** with all 4 photos in order:
-  `main.jpg` → `detail-1.jpg` → `detail-2.jpg` → `detail-3.jpg`
-- Lightbox supports swipe on mobile and keyboard navigation
+- Gallery page shows exactly **3 cards** — one per cake
+- Each card: name, price, description below; in-card photo carousel above
+- `allImages[0]` is always `main.jpg` (the starting photo); no separate `mainImage` prop
 - To add more detail photos: add `detail-4.jpg` etc. to the cake folder and append the
-  path to the relevant `allImages` array in `gallery.astro` (also add a dot in `CakeGalleryCard.astro`)
+  path to the relevant `allImages` array in `gallery.astro`
 
 **How the about slideshow works (`src/components/ProfileSlideshow.astro`):**
 - Auto-advances every 4 seconds with a CSS opacity fade
@@ -173,21 +189,22 @@ See `.env.example` for the template.
 - `src/components/ProfileSlideshow.astro` — auto-advancing photo slideshow (5 photos,
   4s interval, dot navigation) used on the About page
 - `src/pages/about.astro` — two-column layout: ProfileSlideshow left, story right
-- `src/components/CakeGalleryCard.astro` — card component with main image, dot indicators,
-  and PhotoSwipe 5 lightbox (4 photos per cake: main + detail-1/2/3)
-- `src/pages/gallery.astro` — 3-card grid (one per cake); clicking opens full lightbox
+- `src/components/CakeGalleryCard.astro` — card component with in-card photo carousel
+  (left/right arrows, active dots, fade transition, swipe support); CSS filter + warm overlay
+- `src/pages/gallery.astro` — 3-card grid (one per cake); Instagram link below Order Now
 
 ### ✅ Phase 2 — Order Form + Email
-- `src/lib/orderSchema.ts` — single Zod v4 schema used by both client and server;
-  `cakeSelection` enum enforces only the three permitted cake options
+- `src/lib/orderSchema.ts` — single Zod v4 schema; exports `CAKE_OPTIONS`, `TIME_SLOTS`,
+  `REFERRAL_OPTIONS`, `COUNTIES`; `cakeSelection` enum enforces only the three permitted options
 - `src/pages/order.astro` — inquiry form fields:
   - Name, email, phone (required)
   - Cake selection dropdown — Tres Leches Cake / Tres Leches Cupcakes /
     Cheesecake Cupcakes (required)
   - Add-ons & Special Requests — free-text textarea (optional)
-  - Requested date — min 7 days from today, enforced client + server (required)
+  - Requested date + Preferred Time (side-by-side on desktop); both required;
+    time slots 10:00 AM–6:00 PM in 1-hour increments
   - Pickup / Delivery toggle; delivery reveals county (OC/LA) + address (required)
-  - How did you hear about me? (optional)
+  - How did you hear? — dropdown with Other → text reveal (referral + referralOther)
   - Pricing note below cake dropdown; sweetness note below fulfillment section
   - Client-side Zod validation with inline errors and scroll-to-first-error
   - POSTs JSON to `/api/order`; shows success state on 200, field errors on 422

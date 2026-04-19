@@ -76,13 +76,28 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
         </blockquote>
 
         <!-- CTA -->
-        <div class="pt-4">
+        <div class="pt-4 flex flex-col gap-4">
           <a
             href="/order"
             class="inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
             style="font-family: var(--font-body); font-weight: 300;"
           >
             Order a Cake
+          </a>
+          <a
+            href="https://www.instagram.com/keribakesoc/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 text-sm text-charcoal/50 hover:text-mauve transition-colors duration-300"
+            style="font-family: var(--font-body); font-weight: 300;"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/>
+            </svg>
+            Follow along on Instagram
+            <span class="text-mauve/70">@keribakesoc</span>
           </a>
         </div>
       </div>

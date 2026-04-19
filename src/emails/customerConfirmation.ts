@@ -40,6 +40,7 @@ export function customerConfirmationHtml(data: OrderFormData): string {
 
       ${row('Cake', data.cakeSelection)}
       ${row('Requested Date', data.requestedDate)}
+      ${row('Preferred Time', data.preferredTime)}
       ${row('Fulfillment', data.fulfillment === 'delivery' ? `Delivery — ${data.county}` : 'Pickup')}
       ${data.fulfillment === 'delivery' && data.address ? row('Address', data.address) : ''}
 
