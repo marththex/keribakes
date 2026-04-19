@@ -1,69 +1,82 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-interface GalleryItem {
+interface CakeProduct {
+  name: string;
+  slug: string;
+  price: string;
+  description: string;
+  mainImage: string;
+  detailImages: string[];
+}
+
+const products: CakeProduct[] = [
+  {
+    name: 'Tres Leches Cake',
+    slug: 'tres-leches-cake',
+    price: 'From $65',
+    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
+    mainImage: '/images/gallery/tres-leches-cake/main.jpg',
+    detailImages: [
+      '/images/gallery/tres-leches-cake/detail-1.jpg',
+      '/images/gallery/tres-leches-cake/detail-2.jpg',
+      '/images/gallery/tres-leches-cake/detail-3.jpg',
+    ],
+  },
+  {
+    name: 'Tres Leches Cupcakes',
+    slug: 'tres-leches-cupcakes',
+    price: 'From $48 / dozen',
+    description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
+    mainImage: '/images/gallery/tres-leches-cupcakes/main.jpg',
+    detailImages: [
+      '/images/gallery/tres-leches-cupcakes/detail-1.jpg',
+      '/images/gallery/tres-leches-cupcakes/detail-2.jpg',
+      '/images/gallery/tres-leches-cupcakes/detail-3.jpg',
+    ],
+  },
+  {
+    name: 'Cheesecake Cupcakes',
+    slug: 'cheesecake-cupcakes',
+    price: 'From $48 / dozen',
+    description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
+    mainImage: '/images/gallery/cheesecake-cupcakes/main.jpg',
+    detailImages: [
+      '/images/gallery/cheesecake-cupcakes/detail-1.jpg',
+      '/images/gallery/cheesecake-cupcakes/detail-2.jpg',
+      '/images/gallery/cheesecake-cupcakes/detail-3.jpg',
+    ],
+  },
+];
+
+// Flatten into one ordered list: main first, then details
+interface GalleryCard {
+  src: string;
+  alt: string;
   name: string;
   price: string;
   description: string;
-  bg: string;
+  isMain: boolean;
 }
 
-const items: GalleryItem[] = [
+const cards: GalleryCard[] = products.flatMap(p => [
   {
-    name: 'Tres Leches Cake',
-    price: 'From $65',
-    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
-    bg: '#D9C5C0',
+    src: p.mainImage,
+    alt: p.name,
+    name: p.name,
+    price: p.price,
+    description: p.description,
+    isMain: true,
   },
-  {
-    name: 'Tres Leches Cupcakes',
-    price: 'From $48 / dozen',
-    description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
-    bg: '#C4B8C8',
-  },
-  {
-    name: 'Cheesecake Cupcakes',
-    price: 'From $48 / dozen',
-    description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
-    bg: '#DFC5AE',
-  },
-  {
-    name: 'Tres Leches Cake',
-    price: 'From $65',
-    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
-    bg: '#E8D8D2',
-  },
-  {
-    name: 'Cheesecake Cupcakes',
-    price: 'From $48 / dozen',
-    description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
-    bg: '#D0C8D8',
-  },
-  {
-    name: 'Tres Leches Cupcakes',
-    price: 'From $48 / dozen',
-    description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
-    bg: '#E2D0BA',
-  },
-  {
-    name: 'Cheesecake Cupcakes',
-    price: 'From $48 / dozen',
-    description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
-    bg: '#C8D4C0',
-  },
-  {
-    name: 'Tres Leches Cake',
-    price: 'From $65',
-    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
-    bg: '#D8C0C8',
-  },
-  {
-    name: 'Tres Leches Cupcakes',
-    price: 'From $48 / dozen',
-    description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
-    bg: '#C8D8C8',
-  },
-];
+  ...p.detailImages.map((src, i) => ({
+    src,
+    alt: `${p.name} — detail ${i + 1}`,
+    name: p.name,
+    price: p.price,
+    description: p.description,
+    isMain: false,
+  })),
+]);
 ---
 
 <Layout
@@ -87,13 +100,6 @@ const items: GalleryItem[] = [
       >
         The Gallery
       </h1>
-      <p
-        class="mt-4 text-charcoal/70 max-w-sm mx-auto leading-relaxed"
-        style="font-family: var(--font-body); font-weight: 300;"
-      >
-        Real photos coming soon. Each placeholder represents one of my
-        signature bakes.
-      </p>
     </div>
 
     <!-- Order CTA — top, right-aligned -->
@@ -107,48 +113,43 @@ const items: GalleryItem[] = [
       </a>
     </div>
 
-    <!-- Responsive grid -->
+    <!-- Responsive grid — 12 cards total (main + 3 details × 3 products) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {items.map(item => (
+      {cards.map(card => (
         <article class="group flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
 
-          <!-- Placeholder image area -->
-          <div
-            class="w-full aspect-square flex items-center justify-center"
-            style={`background-color: ${item.bg};`}
-            aria-label={`${item.name} — photo coming soon`}
-          >
-            <span
-              class="text-white/30 text-4xl select-none"
-              aria-hidden="true"
-            >
-              ✦
-            </span>
-          </div>
+          <img
+            src={card.src}
+            alt={card.alt}
+            class="w-full aspect-square object-cover"
+            loading="lazy"
+            decoding="async"
+          />
 
-          <!-- Card label -->
-          <div class="bg-cream px-5 py-5 flex flex-col gap-2">
-            <div class="flex items-baseline justify-between gap-2">
-              <h2
-                class="text-base text-charcoal group-hover:text-mauve transition-colors duration-300"
-                style="font-family: var(--font-display); font-weight: 400;"
+          {card.isMain && (
+            <div class="bg-cream px-5 py-5 flex flex-col gap-2">
+              <div class="flex items-baseline justify-between gap-2">
+                <h2
+                  class="text-base text-charcoal group-hover:text-mauve transition-colors duration-300"
+                  style="font-family: var(--font-display); font-weight: 400;"
+                >
+                  {card.name}
+                </h2>
+                <span
+                  class="text-xs tracking-[0.08em] shrink-0 text-mauve"
+                  style="font-family: var(--font-body); font-weight: 300;"
+                >
+                  {card.price}
+                </span>
+              </div>
+              <p
+                class="text-charcoal/70 leading-relaxed"
+                style="font-family: var(--font-body); font-weight: 300; font-size: 0.8125rem;"
               >
-                {item.name}
-              </h2>
-              <span
-                class="text-xs tracking-[0.08em] shrink-0 text-mauve"
-                style="font-family: var(--font-body); font-weight: 300;"
-              >
-                {item.price}
-              </span>
+                {card.description}
+              </p>
             </div>
-            <p
-              class="text-charcoal/70 leading-relaxed"
-              style="font-family: var(--font-body); font-weight: 300; font-size: 0.8125rem;"
-            >
-              {item.description}
-            </p>
-          </div>
+          )}
 
         </article>
       ))}

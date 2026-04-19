@@ -78,6 +78,35 @@ These rules are standing constraints. Do not reintroduce any of the following:
 About page closing line: "Let's make your special occasion something deliciously
 unforgettable." — do not change this without explicit instruction.
 
+## Photos & Media
+All real photos are now live. Images are stored in `public/images/` and served statically.
+
+**Naming conventions:**
+- About page: `public/images/about/profile-1.jpg` through `profile-5.jpg` (5 photos)
+- Gallery: `public/images/gallery/<cake-slug>/main.jpg` + `detail-1.jpg` through `detail-3.jpg`
+  - `tres-leches-cake/`
+  - `tres-leches-cupcakes/`
+  - `cheesecake-cupcakes/`
+
+**How the gallery is structured (`src/pages/gallery.astro`):**
+- Each cake product is defined with `mainImage` and `detailImages[]`
+- Cards are flattened into a 12-item grid (1 main + 3 details per product × 3 products)
+- Only the main image card shows the name, price, and description label
+- To add more detail photos: add `detail-4.jpg` etc. to the cake folder and append the
+  path to the relevant `detailImages` array in `gallery.astro`
+
+**How the about slideshow works (`src/components/ProfileSlideshow.astro`):**
+- Auto-advances every 4 seconds with a CSS opacity fade
+- Dot indicators allow manual navigation
+- To replace or reorder photos: swap files in `public/images/about/`, keeping filenames
+  `profile-1.jpg` through `profile-5.jpg`; update the `photos` array in the component
+  if filenames change
+
+**Image tags:** Images in `public/` are rendered with plain `<img>` tags using
+`loading="lazy"` and `decoding="async"`. If Astro image optimisation (webp conversion,
+quality 80) is needed in future, move images to `src/assets/` and import them with
+Astro's `<Image>` component from `astro:assets`.
+
 ## Git Conventions
 - Always commit using the repo's local git config (already set: Marcus Chong / marcuslchong@gmail.com)
 - Never mention Claude, AI, or "as requested" in commit messages
@@ -123,7 +152,7 @@ See `.env.example` for the template.
 | Phase | Status | Description |
 |-------|--------|-------------|
 | Phase 0 | ✅ Complete | Setup & Tooling |
-| Phase 1 | ✅ Complete | Core Pages (Home, About, Gallery) |
+| Phase 1 | ✅ Complete | Core Pages (Home, About, Gallery — all with real photos) |
 | Phase 2 | ✅ Complete | Order Form + Resend Email Integration |
 | Phase 3 | 🔲 Not started | Docker + NAS Deployment |
 | Phase 4 | 🔲 Not started | Polish + Launch |
@@ -139,9 +168,11 @@ See `.env.example` for the template.
 - `src/layouts/Layout.astro` — sticky nav (logo left, links right), footer
   with Instagram placeholder and copyright
 - `src/pages/index.astro` — three-column hero + warm closing paragraph
-- `src/pages/about.astro` — two-column layout: photo placeholder + story
-- `src/pages/gallery.astro` — responsive 1/2/3-col grid; cards show cake name,
-  price range, and short description; real photos to be swapped in later
+- `src/components/ProfileSlideshow.astro` — auto-advancing photo slideshow (5 photos,
+  4s interval, dot navigation) used on the About page
+- `src/pages/about.astro` — two-column layout: ProfileSlideshow left, story right
+- `src/pages/gallery.astro` — 12-card responsive grid (main + 3 details per product);
+  only main cards show the name/price/description label; all real photos wired up
 
 ### ✅ Phase 2 — Order Form + Email
 - `src/lib/orderSchema.ts` — single Zod v4 schema used by both client and server;

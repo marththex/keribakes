@@ -24,21 +24,40 @@ Website for Keri Zhong's custom celebration cake side business — built with As
 
 Final pricing depends on add-ons (fruit toppings, organic ingredients, decorations, candles, etc.). Sweetness cannot be adjusted.
 
+## Photos
+
+All photos live in `public/images/` and are served as static files.
+
+| Folder | Contents |
+|--------|----------|
+| `public/images/about/` | `profile-1.jpg` – `profile-5.jpg` (About page slideshow) |
+| `public/images/gallery/tres-leches-cake/` | `main.jpg`, `detail-1.jpg` – `detail-3.jpg` |
+| `public/images/gallery/tres-leches-cupcakes/` | `main.jpg`, `detail-1.jpg` – `detail-3.jpg` |
+| `public/images/gallery/cheesecake-cupcakes/` | `main.jpg`, `detail-1.jpg` – `detail-3.jpg` |
+
+**To replace about photos:** swap files in `public/images/about/`, keeping the same filenames (`profile-1.jpg` etc.).
+
+**To add more gallery detail photos:** add `detail-4.jpg` etc. to the relevant cake folder, then append the path to that product's `detailImages` array in `src/pages/gallery.astro`.
+
+**To add a new cake product:** add a folder under `public/images/gallery/`, add `main.jpg` + detail photos, then add a new entry to the `products` array in `src/pages/gallery.astro` and to `CAKE_OPTIONS` in `src/lib/orderSchema.ts`.
+
 ## Project Structure
 
 ```
 src/
+├── components/
+│   └── ProfileSlideshow.astro # Auto-advancing photo slideshow for About page
 ├── layouts/
-│   └── Layout.astro          # Shared shell: Google Fonts, sticky nav, footer
+│   └── Layout.astro           # Shared shell: Google Fonts, sticky nav, footer
 ├── pages/
-│   ├── index.astro           # Home — 3-col hero + warm closing paragraph
-│   ├── about.astro           # About — photo placeholder + story
-│   ├── gallery.astro         # Gallery — responsive grid with prices (real photos TBD)
-│   ├── order.astro           # Order inquiry form
+│   ├── index.astro            # Home — 3-col hero + warm closing paragraph
+│   ├── about.astro            # About — ProfileSlideshow + story
+│   ├── gallery.astro          # Gallery — 12-card grid (real photos)
+│   ├── order.astro            # Order inquiry form
 │   └── api/
-│       └── order.ts          # POST endpoint: server validation + Resend
+│       └── order.ts           # POST endpoint: server validation + Resend
 ├── lib/
-│   └── orderSchema.ts        # Zod schema shared by client and server
+│   └── orderSchema.ts         # Zod schema shared by client and server
 ├── emails/
 │   ├── customerConfirmation.ts   # HTML email for customer
 │   └── ownerNotification.ts      # HTML email for owner

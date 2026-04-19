@@ -1,0 +1,123 @@
+---
+const photos = [
+  { src: '/images/about/profile-1.jpg', alt: 'Keri in the kitchen' },
+  { src: '/images/about/profile-2.jpg', alt: 'Keri decorating a cake' },
+  { src: '/images/about/profile-3.jpg', alt: 'Freshly baked creation' },
+  { src: '/images/about/profile-4.jpg', alt: 'Keri with a finished cake' },
+  { src: '/images/about/profile-5.jpg', alt: 'Behind the scenes' },
+];
+---
+
+<div class="slideshow-wrapper" aria-label="Photos of Keri and her bakes">
+  <div class="slideshow-track" id="slideshow-track">
+    {photos.map((photo, i) => (
+      <img
+        src={photo.src}
+        alt={photo.alt}
+        class={`slideshow-slide${i === 0 ? ' is-active' : ''}`}
+        loading={i === 0 ? 'eager' : 'lazy'}
+        decoding="async"
+        draggable="false"
+      />
+    ))}
+  </div>
+
+  <!-- Dot indicators -->
+  <div class="slideshow-dots" aria-hidden="true">
+    {photos.map((_, i) => (
+      <button
+        class={`dot${i === 0 ? ' is-active' : ''}`}
+        data-index={i}
+        aria-label={`Go to photo ${i + 1}`}
+      />
+    ))}
+  </div>
+</div>
+
+<style>
+  .slideshow-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #D9C5C0;
+  }
+
+  .slideshow-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slideshow-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.7s ease-in-out;
+    user-select: none;
+  }
+
+  .slideshow-slide.is-active {
+    opacity: 1;
+  }
+
+  .slideshow-dots {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .dot.is-active {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.25);
+  }
+</style>
+
+<script>
+  const INTERVAL = 4000;
+
+  const track  = document.getElementById('slideshow-track');
+  if (track) {
+    const slides = Array.from(track.querySelectorAll<HTMLImageElement>('.slideshow-slide'));
+    const dots   = Array.from(document.querySelectorAll<HTMLButtonElement>('.dot'));
+    let current  = 0;
+    let timer: ReturnType<typeof setInterval>;
+
+    function goTo(index: number) {
+      slides[current].classList.remove('is-active');
+      dots[current].classList.remove('is-active');
+      current = (index + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+      dots[current].classList.add('is-active');
+    }
+
+    function next() { goTo(current + 1); }
+
+    function startTimer() { timer = setInterval(next, INTERVAL); }
+    function stopTimer()  { clearInterval(timer); }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => { stopTimer(); goTo(i); startTimer(); });
+    });
+
+    startTimer();
+  }
+</script>
