@@ -1,0 +1,26 @@
+{
+  "name": "keribakes",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marththex/keribakes.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/node": "^10.0.5",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.8",
+    "resend": "^6.12.0",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^6.0.3",
+    "zod": "^4.3.6"
+  }
+}

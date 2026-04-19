@@ -1,0 +1,462 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Minimum date (server-side, for setting the <input min> attribute)
+const minDate = new Date();
+minDate.setDate(minDate.getDate() + 7);
+const minDateStr = minDate.toISOString().split('T')[0];
+
+const occasions = [
+  'Birthday',
+  'Baby Shower',
+  'Graduation',
+  'Bridal Shower',
+  'Engagement',
+  'Anniversary',
+  'Holiday',
+  'Other',
+];
+---
+
+<Layout
+  title="Order — Keri Bakes"
+  description="Place a custom cake inquiry with Keri Bakes."
+>
+  <section class="max-w-2xl mx-auto px-6 py-20 md:py-28">
+
+    <!-- Header -->
+    <div class="mb-12 text-center">
+      <p
+        class="text-xs tracking-[0.2em] uppercase text-mauve mb-4"
+        style="font-family: var(--font-body); font-weight: 200;"
+      >
+        Let's get started
+      </p>
+      <h1
+        class="text-5xl md:text-6xl text-charcoal"
+        style="font-family: var(--font-display); font-weight: 300;"
+      >
+        Place an Inquiry
+      </h1>
+      <p
+        class="mt-4 text-charcoal/50 leading-relaxed"
+        style="font-family: var(--font-body); font-weight: 300;"
+      >
+        Fill in as much detail as you can — the more I know, the better I can
+        bring your vision to life. I'll respond within 24–48 hours.
+      </p>
+    </div>
+
+    <!-- ── FORM ──────────────────────────────────────────────── -->
+    <form
+      id="order-form"
+      novalidate
+      class="flex flex-col gap-8"
+    >
+
+      <!-- Contact details -->
+      <fieldset class="flex flex-col gap-5">
+        <legend
+          class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
+          style="font-family: var(--font-body); font-weight: 200;"
+        >
+          Your Details
+        </legend>
+
+        <div class="flex flex-col gap-1">
+          <label for="name" class="form-label">Full Name *</label>
+          <input id="name" name="name" type="text" autocomplete="name"
+            class="form-input" placeholder="Jane Smith" />
+          <p class="form-error hidden" data-error="name"></p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div class="flex flex-col gap-1">
+            <label for="email" class="form-label">Email *</label>
+            <input id="email" name="email" type="email" autocomplete="email"
+              class="form-input" placeholder="jane@example.com" />
+            <p class="form-error hidden" data-error="email"></p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="phone" class="form-label">Phone *</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel"
+              class="form-input" placeholder="(714) 555-0100" />
+            <p class="form-error hidden" data-error="phone"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Cake details -->
+      <fieldset class="flex flex-col gap-5">
+        <legend
+          class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
+          style="font-family: var(--font-body); font-weight: 200;"
+        >
+          Cake Details
+        </legend>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div class="flex flex-col gap-1">
+            <label for="occasion" class="form-label">Occasion *</label>
+            <select id="occasion" name="occasion" class="form-input">
+              <option value="">Select an occasion…</option>
+              {occasions.map(o => <option value={o}>{o}</option>)}
+            </select>
+            <p class="form-error hidden" data-error="occasion"></p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="servings" class="form-label">Approx. Servings *</label>
+            <input id="servings" name="servings" type="number"
+              min="6" max="500" class="form-input" placeholder="e.g. 24" />
+            <p class="form-error hidden" data-error="servings"></p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="requestedDate" class="form-label">
+            Requested Date *
+            <span
+              class="ml-2 text-charcoal/40 normal-case tracking-normal"
+              style="font-size: 11px;"
+            >
+              (minimum 7 days from today)
+            </span>
+          </label>
+          <input
+            id="requestedDate"
+            name="requestedDate"
+            type="date"
+            min={minDateStr}
+            class="form-input"
+          />
+          <p class="form-error hidden" data-error="requestedDate"></p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="flavorNotes" class="form-label">Flavor Preferences *</label>
+          <textarea id="flavorNotes" name="flavorNotes" rows={3}
+            class="form-input resize-none"
+            placeholder="e.g. Vanilla sponge with fresh strawberry cream, not too sweet…"
+          ></textarea>
+          <p class="form-error hidden" data-error="flavorNotes"></p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="designNotes" class="form-label">Design Vision *</label>
+          <textarea id="designNotes" name="designNotes" rows={3}
+            class="form-input resize-none"
+            placeholder="e.g. Minimalist style, dusty rose and sage, a few sugar flowers on top…"
+          ></textarea>
+          <p class="form-error hidden" data-error="designNotes"></p>
+        </div>
+      </fieldset>
+
+      <!-- Pickup / Delivery -->
+      <fieldset class="flex flex-col gap-5">
+        <legend
+          class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
+          style="font-family: var(--font-body); font-weight: 200;"
+        >
+          Fulfillment
+        </legend>
+
+        <div class="flex gap-6">
+          <label class="fulfillment-option">
+            <input type="radio" name="fulfillment" value="pickup" checked
+              class="sr-only peer" />
+            <span class="fulfillment-pill peer-checked:fulfillment-pill-active">
+              Pickup
+            </span>
+          </label>
+          <label class="fulfillment-option">
+            <input type="radio" name="fulfillment" value="delivery"
+              class="sr-only peer" />
+            <span class="fulfillment-pill peer-checked:fulfillment-pill-active">
+              Delivery
+            </span>
+          </label>
+        </div>
+
+        <!-- Delivery fields — shown/hidden by JS -->
+        <div id="delivery-fields" class="hidden flex flex-col gap-5">
+          <div class="flex flex-col gap-1">
+            <label for="county" class="form-label">Delivery County *</label>
+            <select id="county" name="county" class="form-input">
+              <option value="">Select county…</option>
+              <option value="Orange County">Orange County</option>
+              <option value="Los Angeles County">Los Angeles County</option>
+            </select>
+            <p class="form-error hidden" data-error="county"></p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="address" class="form-label">Full Delivery Address *</label>
+            <input id="address" name="address" type="text"
+              autocomplete="street-address"
+              class="form-input"
+              placeholder="123 Blossom Ave, Irvine, CA 92618" />
+            <p class="form-error hidden" data-error="address"></p>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Optional referral -->
+      <fieldset class="flex flex-col gap-2">
+        <legend
+          class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
+          style="font-family: var(--font-body); font-weight: 200;"
+        >
+          Optional
+        </legend>
+        <label for="referral" class="form-label">
+          How did you hear about me?
+        </label>
+        <input id="referral" name="referral" type="text"
+          class="form-input"
+          placeholder="Instagram, a friend, Google…" />
+      </fieldset>
+
+      <!-- Global server error -->
+      <p
+        id="server-error"
+        class="hidden text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-3"
+        style="font-family: var(--font-body); font-weight: 300;"
+        role="alert"
+      ></p>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        id="submit-btn"
+        class="self-start text-xs tracking-[0.2em] uppercase bg-charcoal text-cream px-10 py-4 hover:bg-mauve transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        style="font-family: var(--font-body); font-weight: 300;"
+      >
+        Send Inquiry
+      </button>
+
+    </form>
+
+    <!-- ── SUCCESS STATE ──────────────────────────────────────── -->
+    <div
+      id="success-msg"
+      class="hidden flex flex-col items-center text-center gap-6 py-16"
+      role="alert"
+    >
+      <div class="w-16 h-16 rounded-full bg-lavender/40 flex items-center justify-center text-2xl">
+        ✦
+      </div>
+      <h2
+        class="text-4xl text-charcoal"
+        style="font-family: var(--font-display); font-weight: 300;"
+      >
+        Inquiry received!
+      </h2>
+      <p
+        class="text-charcoal/60 max-w-sm leading-relaxed"
+        style="font-family: var(--font-body); font-weight: 300;"
+      >
+        Thank you — I'll be in touch within 24–48 hours to discuss the details
+        and confirm your date. Keep an eye on your inbox (and spam, just in case).
+      </p>
+      <a
+        href="/gallery"
+        class="text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
+        style="font-family: var(--font-body); font-weight: 300;"
+      >
+        Browse the Gallery
+      </a>
+    </div>
+
+  </section>
+</Layout>
+
+<!-- ── Inline styles for reusable form classes ────────────────── -->
+<style>
+  .form-label {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4A4040;
+    opacity: 0.7;
+  }
+
+  .form-input {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.9375rem;
+    color: #4A4040;
+    background: #fff;
+    border: 1px solid #D9C5C0;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .form-input:focus {
+    border-color: #A89BAE;
+  }
+
+  .form-input.input-error {
+    border-color: #c0392b;
+  }
+
+  .form-error {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.75rem;
+    color: #c0392b;
+    margin-top: 2px;
+  }
+
+  .fulfillment-option {
+    cursor: pointer;
+  }
+
+  .fulfillment-pill {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid #D9C5C0;
+    color: #4A4040;
+    opacity: 0.6;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .fulfillment-pill:hover {
+    border-color: #A89BAE;
+    opacity: 0.9;
+  }
+
+  .fulfillment-pill-active,
+  .peer:checked ~ .fulfillment-pill {
+    border-color: #A89BAE;
+    background-color: #A89BAE;
+    color: #fff;
+    opacity: 1;
+  }
+</style>
+
+<!-- ── Client-side validation & submission ────────────────────── -->
+<script>
+  import { z } from 'zod';
+  import { orderSchema } from '../lib/orderSchema';
+
+  const form       = document.getElementById('order-form')    as HTMLFormElement;
+  const submitBtn  = document.getElementById('submit-btn')    as HTMLButtonElement;
+  const successMsg = document.getElementById('success-msg')   as HTMLElement;
+  const serverErr  = document.getElementById('server-error')  as HTMLElement;
+  const delivFields = document.getElementById('delivery-fields') as HTMLElement;
+
+  // ── Delivery toggle ─────────────────────────────────────────
+  const radios = form.querySelectorAll<HTMLInputElement>('input[name="fulfillment"]');
+  radios.forEach(r => r.addEventListener('change', () => {
+    const isDelivery = (form.elements.namedItem('fulfillment') as RadioNodeList).value === 'delivery';
+    delivFields.classList.toggle('hidden', !isDelivery);
+  }));
+
+  // ── Helpers ─────────────────────────────────────────────────
+  function showError(field: string, msg: string) {
+    const el = form.querySelector<HTMLElement>(`[data-error="${field}"]`);
+    const input = form.querySelector<HTMLElement>(`#${field}`) ??
+                  form.querySelector<HTMLElement>(`[name="${field}"]`);
+    if (el) { el.textContent = msg; el.classList.remove('hidden'); }
+    if (input) input.classList.add('input-error');
+  }
+
+  function clearErrors() {
+    form.querySelectorAll('.form-error').forEach(el => {
+      el.classList.add('hidden');
+      el.textContent = '';
+    });
+    form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    serverErr.classList.add('hidden');
+    serverErr.textContent = '';
+  }
+
+  function collectData(): Record<string, unknown> {
+    const fd = new FormData(form);
+    return {
+      name:          fd.get('name'),
+      email:         fd.get('email'),
+      phone:         fd.get('phone'),
+      occasion:      fd.get('occasion'),
+      servings:      Number(fd.get('servings')),
+      flavorNotes:   fd.get('flavorNotes'),
+      designNotes:   fd.get('designNotes'),
+      requestedDate: fd.get('requestedDate'),
+      fulfillment:   fd.get('fulfillment'),
+      county:        fd.get('county') ?? undefined,
+      address:       fd.get('address') ?? undefined,
+      referral:      fd.get('referral') ?? undefined,
+    };
+  }
+
+  // ── Submit ───────────────────────────────────────────────────
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    const raw = collectData();
+
+    // Client-side Zod validation
+    const result = orderSchema.safeParse(raw);
+    if (!result.success) {
+      const flat = z.flattenError(result.error).fieldErrors;
+      let firstField: string | null = null;
+      for (const [field, msgs] of Object.entries(flat)) {
+        if (msgs && msgs.length > 0) {
+          showError(field, msgs[0]);
+          if (!firstField) firstField = field;
+        }
+      }
+      if (firstField) {
+        const el = form.querySelector<HTMLElement>(`#${firstField}`);
+        el?.focus();
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
+    // POST to API
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    try {
+      const resp = await fetch('/api/order', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(result.data),
+      });
+
+      const json = await resp.json() as { success: boolean; error?: string; fieldErrors?: Record<string, string[]> };
+
+      if (json.success) {
+        form.classList.add('hidden');
+        successMsg.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (json.fieldErrors) {
+        for (const [field, msgs] of Object.entries(json.fieldErrors)) {
+          if (msgs && msgs.length > 0) showError(field, msgs[0]);
+        }
+      } else {
+        serverErr.textContent = json.error ?? 'Something went wrong. Please try again.';
+        serverErr.classList.remove('hidden');
+      }
+    } catch {
+      serverErr.textContent = 'Network error — please check your connection and try again.';
+      serverErr.classList.remove('hidden');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Inquiry';
+    }
+  });
+</script>

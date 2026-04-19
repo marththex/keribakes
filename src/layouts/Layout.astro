@@ -1,0 +1,127 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Keri Bakes',
+  description = 'Custom celebration cakes baked with love in Orange County.',
+} = Astro.props;
+
+const navLinks = [
+  { label: 'Home',    href: '/'        },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'About',   href: '/about'   },
+  { label: 'Order',   href: '/order'   },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="min-h-screen flex flex-col bg-cream text-charcoal">
+
+    <!-- Sticky Nav -->
+    <header class="sticky top-0 z-50 bg-cream/90 backdrop-blur-sm border-b border-blush/40">
+      <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <!-- Logo -->
+        <a
+          href="/"
+          class="font-display text-2xl tracking-wide text-charcoal hover:text-mauve transition-colors duration-300"
+          style="font-family: var(--font-display);"
+        >
+          Keri Bakes
+        </a>
+
+        <!-- Desktop Links -->
+        <ul class="hidden sm:flex items-center gap-8">
+          {navLinks.map(link => (
+            <li>
+              <a
+                href={link.href}
+                class={[
+                  'text-sm font-body tracking-widest uppercase transition-colors duration-300',
+                  currentPath === link.href
+                    ? 'text-mauve border-b border-mauve pb-0.5'
+                    : 'text-charcoal/70 hover:text-charcoal',
+                ].join(' ')}
+                style="font-family: var(--font-body); font-weight: 300; letter-spacing: 0.12em;"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <!-- Mobile menu hint (hamburger-free for now, links stack on small screens) -->
+        <ul class="flex sm:hidden items-center gap-4">
+          {navLinks.map(link => (
+            <li>
+              <a
+                href={link.href}
+                class="text-xs text-charcoal/70 hover:text-charcoal transition-colors"
+                style="font-family: var(--font-body); font-weight: 300;"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Page content -->
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-cream/80 mt-auto">
+      <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span
+          class="text-xl tracking-wide"
+          style="font-family: var(--font-display); font-weight: 300;"
+        >
+          Keri Bakes
+        </span>
+
+        <a
+          href="https://instagram.com/keribakes"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm tracking-widest uppercase text-cream/60 hover:text-cream transition-colors duration-300"
+          style="font-family: var(--font-body); font-weight: 200; letter-spacing: 0.14em;"
+        >
+          @keribakes
+        </a>
+
+        <p
+          class="text-xs text-cream/40"
+          style="font-family: var(--font-body); font-weight: 200;"
+        >
+          &copy; {new Date().getFullYear()} Keri Bakes. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+  </body>
+</html>
