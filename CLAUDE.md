@@ -88,12 +88,14 @@ All real photos are now live. Images are stored in `public/images/` and served s
   - `tres-leches-cupcakes/`
   - `cheesecake-cupcakes/`
 
-**How the gallery is structured (`src/pages/gallery.astro`):**
-- Each cake product is defined with `mainImage` and `detailImages[]`
-- Cards are flattened into a 12-item grid (1 main + 3 details per product × 3 products)
-- Only the main image card shows the name, price, and description label
+**How the gallery is structured (`src/pages/gallery.astro` + `src/components/CakeGalleryCard.astro`):**
+- Gallery page shows exactly **3 cards** — one per cake, displaying only `main.jpg`
+- Each card shows: name, price, description, and 4 dot indicators (mauve/blush) signalling more photos
+- Clicking a card opens a **PhotoSwipe 5 lightbox** with all 4 photos in order:
+  `main.jpg` → `detail-1.jpg` → `detail-2.jpg` → `detail-3.jpg`
+- Lightbox supports swipe on mobile and keyboard navigation
 - To add more detail photos: add `detail-4.jpg` etc. to the cake folder and append the
-  path to the relevant `detailImages` array in `gallery.astro`
+  path to the relevant `allImages` array in `gallery.astro` (also add a dot in `CakeGalleryCard.astro`)
 
 **How the about slideshow works (`src/components/ProfileSlideshow.astro`):**
 - Auto-advances every 4 seconds with a CSS opacity fade
@@ -171,8 +173,9 @@ See `.env.example` for the template.
 - `src/components/ProfileSlideshow.astro` — auto-advancing photo slideshow (5 photos,
   4s interval, dot navigation) used on the About page
 - `src/pages/about.astro` — two-column layout: ProfileSlideshow left, story right
-- `src/pages/gallery.astro` — 12-card responsive grid (main + 3 details per product);
-  only main cards show the name/price/description label; all real photos wired up
+- `src/components/CakeGalleryCard.astro` — card component with main image, dot indicators,
+  and PhotoSwipe 5 lightbox (4 photos per cake: main + detail-1/2/3)
+- `src/pages/gallery.astro` — 3-card grid (one per cake); clicking opens full lightbox
 
 ### ✅ Phase 2 — Order Form + Email
 - `src/lib/orderSchema.ts` — single Zod v4 schema used by both client and server;
