@@ -36,18 +36,11 @@ export function ownerNotificationHtml(data: OrderFormData): string {
         <tr><td>Name</td><td>${escHtml(data.name)}</td></tr>
         <tr><td>Email</td><td><a href="mailto:${escHtml(data.email)}">${escHtml(data.email)}</a></td></tr>
         <tr><td>Phone</td><td>${escHtml(data.phone)}</td></tr>
-        <tr><td>Occasion</td><td>${escHtml(data.occasion)}</td></tr>
+        <tr><td>Cake</td><td>${escHtml(data.cakeSelection)}</td></tr>
         <tr><td>Requested Date</td><td>${escHtml(data.requestedDate)}</td></tr>
-        <tr><td>Servings</td><td>${data.servings}</td></tr>
         <tr><td>Fulfillment</td><td>${escHtml(fulfillmentDetail)}</td></tr>
         ${data.referral ? `<tr><td>Referral</td><td>${escHtml(data.referral)}</td></tr>` : ''}
       </table>
-
-      <p style="margin:24px 0 6px; font-size:13px; color:#A89BAE; text-transform:uppercase; letter-spacing:0.1em;">Flavor Notes</p>
-      <div class="notes">${escHtml(data.flavorNotes)}</div>
-
-      <p style="margin:16px 0 6px; font-size:13px; color:#A89BAE; text-transform:uppercase; letter-spacing:0.1em;">Design Notes</p>
-      <div class="notes">${escHtml(data.designNotes)}</div>
     </div>
   </div>
 </body>

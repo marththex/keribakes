@@ -12,6 +12,13 @@ function minDate(): Date {
 export const COUNTIES = ['Orange County', 'Los Angeles County'] as const;
 export type County = (typeof COUNTIES)[number];
 
+export const CAKE_OPTIONS = [
+  'Tres Leches Cake',
+  'Tres Leches Cupcakes',
+  'Cheesecake Cupcakes',
+] as const;
+export type CakeOption = (typeof CAKE_OPTIONS)[number];
+
 export const orderSchema = z
   .object({
     name: z.string().min(1, 'Name is required'),
@@ -20,14 +27,7 @@ export const orderSchema = z
       .string()
       .min(7, 'Enter a valid phone number')
       .regex(/^[\d\s\-()+]+$/, 'Enter a valid phone number'),
-    occasion: z.string().min(1, 'Occasion is required'),
-    servings: z
-      .number({ error: 'Enter a number of servings' })
-      .int('Enter a whole number of servings')
-      .min(6, 'Minimum 6 servings')
-      .max(500, 'Maximum 500 servings'),
-    flavorNotes: z.string().min(1, 'Please share your flavor preferences'),
-    designNotes: z.string().min(1, 'Please describe your design vision'),
+    cakeSelection: z.enum(CAKE_OPTIONS, { error: 'Please select a cake' }),
     requestedDate: z
       .string()
       .min(1, 'Please choose a date')

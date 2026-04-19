@@ -38,13 +38,10 @@ export function customerConfirmationHtml(data: OrderFormData): string {
       </p>
       <p>Here's a summary of what you submitted:</p>
 
-      ${row('Occasion', data.occasion)}
+      ${row('Cake', data.cakeSelection)}
       ${row('Requested Date', data.requestedDate)}
-      ${row('Servings', String(data.servings))}
       ${row('Fulfillment', data.fulfillment === 'delivery' ? `Delivery — ${data.county}` : 'Pickup')}
       ${data.fulfillment === 'delivery' && data.address ? row('Address', data.address) : ''}
-      ${row('Flavor Notes', data.flavorNotes)}
-      ${row('Design Notes', data.designNotes)}
 
       <p style="margin-top:28px;">
         Can't wait to bake something special for you!<br/>

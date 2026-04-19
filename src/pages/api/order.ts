@@ -40,14 +40,14 @@ export const POST: APIRoute = async ({ request }) => {
     resend.emails.send({
       from: `Keri Bakes <${fromEmail}>`,
       to:   [data.email],
-      subject: `Your Keri Bakes inquiry — ${data.occasion} on ${data.requestedDate}`,
+      subject: `Your Keri Bakes inquiry — ${data.cakeSelection} on ${data.requestedDate}`,
       html: customerConfirmationHtml(data),
     }),
     resend.emails.send({
       from: `Keri Bakes Orders <${fromEmail}>`,
       to:   [toEmail],
       replyTo: data.email,
-      subject: `New inquiry: ${data.name} — ${data.occasion} (${data.requestedDate})`,
+      subject: `New inquiry: ${data.name} — ${data.cakeSelection} (${data.requestedDate})`,
       html: ownerNotificationHtml(data),
     }),
   ]);

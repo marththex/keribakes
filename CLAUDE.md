@@ -78,6 +78,12 @@ These rules are standing constraints. Do not reintroduce any of the following:
 About page closing line: "Let's make your special occasion something deliciously
 unforgettable." — do not change this without explicit instruction.
 
+## Git Conventions
+- Always commit using the repo's local git config (already set: Marcus Chong / marcuslchong@gmail.com)
+- Never mention Claude, AI, or "as requested" in commit messages
+- Write all commit messages in first person, past tense, as the developer
+- Example: "Update order form with add-ons field" — not "Added changes as requested by user"
+
 ## Environment Variables (never hardcode)
   RESEND_API_KEY   = from Resend dashboard
   TO_EMAIL         = real owner inbox (server-side only)

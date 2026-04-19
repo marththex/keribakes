@@ -3,39 +3,78 @@ import Layout from '../layouts/Layout.astro';
 
 interface GalleryItem {
   name: string;
-  occasion: string;
+  price: string;
+  description: string;
   bg: string;
 }
 
 const items: GalleryItem[] = [
-  { name: 'Strawberry Chiffon',    occasion: 'Birthday',       bg: '#D9C5C0' },
-  { name: 'Lavender Honey',        occasion: 'Baby Shower',    bg: '#C4B8C8' },
-  { name: 'Brown Butter Peach',    occasion: 'Birthday',       bg: '#DFC5AE' },
-  { name: 'Vanilla Rose',          occasion: 'Graduation',     bg: '#E8D8D2' },
-  { name: 'Earl Grey Lemon',       occasion: 'Bespoke',        bg: '#D0C8D8' },
-  { name: 'Salted Caramel Layer',  occasion: 'Birthday',       bg: '#E2D0BA' },
-  { name: 'Matcha White Choc',     occasion: 'Baby Shower',    bg: '#C8D4C0' },
-  { name: 'Raspberry Almond',      occasion: 'Graduation',     bg: '#D8C0C8' },
-  { name: 'Coconut Pandan',        occasion: 'Bespoke',        bg: '#C8D8C8' },
+  {
+    name: 'Tres Leches Cake',
+    price: 'From $65',
+    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
+    bg: '#D9C5C0',
+  },
+  {
+    name: 'Tres Leches Cupcakes',
+    price: 'From $48 / dozen',
+    description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
+    bg: '#C4B8C8',
+  },
+  {
+    name: 'Cheesecake Cupcakes',
+    price: 'From $48 / dozen',
+    description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
+    bg: '#DFC5AE',
+  },
+  {
+    name: 'Tres Leches Cake',
+    price: 'From $65',
+    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
+    bg: '#E8D8D2',
+  },
+  {
+    name: 'Cheesecake Cupcakes',
+    price: 'From $48 / dozen',
+    description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
+    bg: '#D0C8D8',
+  },
+  {
+    name: 'Tres Leches Cupcakes',
+    price: 'From $48 / dozen',
+    description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
+    bg: '#E2D0BA',
+  },
+  {
+    name: 'Cheesecake Cupcakes',
+    price: 'From $48 / dozen',
+    description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
+    bg: '#C8D4C0',
+  },
+  {
+    name: 'Tres Leches Cake',
+    price: 'From $65',
+    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
+    bg: '#D8C0C8',
+  },
+  {
+    name: 'Tres Leches Cupcakes',
+    price: 'From $48 / dozen',
+    description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
+    bg: '#C8D8C8',
+  },
 ];
-
-const occasionColors: Record<string, string> = {
-  Birthday:    '#A89BAE',
-  'Baby Shower': '#C4B8C8',
-  Graduation:  '#DFC5AE',
-  Bespoke:     '#D9C5C0',
-};
 ---
 
 <Layout
   title="Gallery — Keri Bakes"
-  description="Browse past custom cakes by Keri Bakes."
+  description="Browse custom cakes by Keri Bakes."
 >
 
   <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
 
     <!-- Header -->
-    <div class="mb-14 text-center">
+    <div class="mb-10 text-center">
       <p
         class="text-xs tracking-[0.2em] uppercase text-mauve mb-4"
         style="font-family: var(--font-body); font-weight: 200;"
@@ -49,12 +88,23 @@ const occasionColors: Record<string, string> = {
         The Gallery
       </h1>
       <p
-        class="mt-4 text-charcoal/50 max-w-sm mx-auto leading-relaxed"
+        class="mt-4 text-charcoal/70 max-w-sm mx-auto leading-relaxed"
         style="font-family: var(--font-body); font-weight: 300;"
       >
-        Real photos coming soon. Each placeholder represents a cake category
-        I love to make.
+        Real photos coming soon. Each placeholder represents one of my
+        signature bakes.
       </p>
+    </div>
+
+    <!-- Order CTA — top, right-aligned -->
+    <div class="flex justify-end mb-10">
+      <a
+        href="/order"
+        class="text-xs tracking-[0.2em] uppercase bg-charcoal text-cream hover:bg-mauve px-8 py-3 transition-colors duration-300"
+        style="font-family: var(--font-body); font-weight: 300;"
+      >
+        Order Now
+      </a>
     </div>
 
     <!-- Responsive grid -->
@@ -77,36 +127,44 @@ const occasionColors: Record<string, string> = {
           </div>
 
           <!-- Card label -->
-          <div class="bg-cream px-5 py-4 flex items-start justify-between gap-2">
-            <h2
-              class="text-base text-charcoal group-hover:text-mauve transition-colors duration-300"
-              style="font-family: var(--font-display); font-weight: 400;"
+          <div class="bg-cream px-5 py-5 flex flex-col gap-2">
+            <div class="flex items-baseline justify-between gap-2">
+              <h2
+                class="text-base text-charcoal group-hover:text-mauve transition-colors duration-300"
+                style="font-family: var(--font-display); font-weight: 400;"
+              >
+                {item.name}
+              </h2>
+              <span
+                class="text-xs tracking-[0.08em] shrink-0 text-mauve"
+                style="font-family: var(--font-body); font-weight: 300;"
+              >
+                {item.price}
+              </span>
+            </div>
+            <p
+              class="text-charcoal/70 leading-relaxed"
+              style="font-family: var(--font-body); font-weight: 300; font-size: 0.8125rem;"
             >
-              {item.name}
-            </h2>
-            <span
-              class="text-xs tracking-[0.12em] uppercase shrink-0 mt-0.5"
-              style={`font-family: var(--font-body); font-weight: 200; color: ${occasionColors[item.occasion] ?? '#A89BAE'};`}
-            >
-              {item.occasion}
-            </span>
+              {item.description}
+            </p>
           </div>
 
         </article>
       ))}
     </div>
 
-    <!-- Bottom CTA -->
+    <!-- Bottom copy -->
     <div class="mt-16 text-center">
       <p
-        class="text-charcoal/50 mb-6"
+        class="text-charcoal/70 mb-6"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         See something you love? Let's create something just for you.
       </p>
       <a
         href="/order"
-        class="inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-8 py-3 transition-all duration-300"
+        class="inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/40 text-charcoal/80 hover:border-mauve hover:text-mauve px-8 py-3 transition-all duration-300"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         Place an Order

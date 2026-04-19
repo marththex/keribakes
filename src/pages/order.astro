@@ -1,21 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { CAKE_OPTIONS } from '../lib/orderSchema';
 
 // Minimum date (server-side, for setting the <input min> attribute)
 const minDate = new Date();
 minDate.setDate(minDate.getDate() + 7);
 const minDateStr = minDate.toISOString().split('T')[0];
-
-const occasions = [
-  'Birthday',
-  'Baby Shower',
-  'Graduation',
-  'Bridal Shower',
-  'Engagement',
-  'Anniversary',
-  'Holiday',
-  'Other',
-];
 ---
 
 <Layout
@@ -39,11 +29,11 @@ const occasions = [
         Place an Inquiry
       </h1>
       <p
-        class="mt-4 text-charcoal/50 leading-relaxed"
+        class="mt-4 text-charcoal/70 leading-relaxed"
         style="font-family: var(--font-body); font-weight: 300;"
       >
-        Fill in as much detail as you can — the more I know, the better I can
-        bring your vision to life. I'll respond within 24–48 hours.
+        Fill out the form below and I'll be in touch within 24–48 hours
+        to confirm your date and discuss the details.
       </p>
     </div>
 
@@ -86,37 +76,56 @@ const occasions = [
         </div>
       </fieldset>
 
-      <!-- Cake details -->
+      <!-- Cake selection -->
       <fieldset class="flex flex-col gap-5">
         <legend
           class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
           style="font-family: var(--font-body); font-weight: 200;"
         >
-          Cake Details
+          Cake Selection
         </legend>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <div class="flex flex-col gap-1">
-            <label for="occasion" class="form-label">Occasion *</label>
-            <select id="occasion" name="occasion" class="form-input">
-              <option value="">Select an occasion…</option>
-              {occasions.map(o => <option value={o}>{o}</option>)}
-            </select>
-            <p class="form-error hidden" data-error="occasion"></p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <label for="servings" class="form-label">Approx. Servings *</label>
-            <input id="servings" name="servings" type="number"
-              min="6" max="500" class="form-input" placeholder="e.g. 24" />
-            <p class="form-error hidden" data-error="servings"></p>
-          </div>
+        <div class="flex flex-col gap-1">
+          <label for="cakeSelection" class="form-label">Select Your Cake *</label>
+          <select id="cakeSelection" name="cakeSelection" class="form-input">
+            <option value="">Choose a cake…</option>
+            {CAKE_OPTIONS.map(cake => <option value={cake}>{cake}</option>)}
+          </select>
+          <p class="form-error hidden" data-error="cakeSelection"></p>
         </div>
+
+        <!-- Pricing note -->
+        <p
+          class="text-charcoal/60 leading-relaxed"
+          style="font-family: var(--font-body); font-weight: 300; font-size: 0.8125rem; font-style: italic;"
+        >
+          Final price is determined by additions such as fruit toppings, organic
+          ingredients, specific decorations, candles, and more.
+        </p>
+
+        <div class="flex flex-col gap-1">
+          <label for="addOns" class="form-label">Add-ons &amp; Special Requests</label>
+          <textarea id="addOns" name="addOns" rows={3}
+            class="form-input resize-none"
+            placeholder="e.g. fresh fruit, candles, organic ingredients, specific decorations..."
+          ></textarea>
+        </div>
+      </fieldset>
+
+      <!-- Date + Fulfillment -->
+      <fieldset class="flex flex-col gap-5">
+        <legend
+          class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
+          style="font-family: var(--font-body); font-weight: 200;"
+        >
+          Date &amp; Fulfillment
+        </legend>
 
         <div class="flex flex-col gap-1">
           <label for="requestedDate" class="form-label">
             Requested Date *
             <span
-              class="ml-2 text-charcoal/40 normal-case tracking-normal"
+              class="ml-2 text-charcoal/60 normal-case tracking-normal"
               style="font-size: 11px;"
             >
               (minimum 7 days from today)
@@ -131,34 +140,6 @@ const occasions = [
           />
           <p class="form-error hidden" data-error="requestedDate"></p>
         </div>
-
-        <div class="flex flex-col gap-1">
-          <label for="flavorNotes" class="form-label">Flavor Preferences *</label>
-          <textarea id="flavorNotes" name="flavorNotes" rows={3}
-            class="form-input resize-none"
-            placeholder="e.g. Vanilla sponge with fresh strawberry cream, not too sweet…"
-          ></textarea>
-          <p class="form-error hidden" data-error="flavorNotes"></p>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <label for="designNotes" class="form-label">Design Vision *</label>
-          <textarea id="designNotes" name="designNotes" rows={3}
-            class="form-input resize-none"
-            placeholder="e.g. Minimalist style, dusty rose and sage, a few sugar flowers on top…"
-          ></textarea>
-          <p class="form-error hidden" data-error="designNotes"></p>
-        </div>
-      </fieldset>
-
-      <!-- Pickup / Delivery -->
-      <fieldset class="flex flex-col gap-5">
-        <legend
-          class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
-          style="font-family: var(--font-body); font-weight: 200;"
-        >
-          Fulfillment
-        </legend>
 
         <div class="flex gap-6">
           <label class="fulfillment-option">
@@ -197,6 +178,15 @@ const occasions = [
             <p class="form-error hidden" data-error="address"></p>
           </div>
         </div>
+
+        <!-- Sweetness / add-ons note -->
+        <p
+          class="text-charcoal/60 leading-relaxed"
+          style="font-family: var(--font-body); font-weight: 300; font-size: 0.8125rem; font-style: italic;"
+        >
+          Please note: sweetness cannot be adjusted. Add-ons such as fruit,
+          candles, and decorations are welcome.
+        </p>
       </fieldset>
 
       <!-- Optional referral -->
@@ -251,7 +241,7 @@ const occasions = [
         Inquiry received!
       </h2>
       <p
-        class="text-charcoal/60 max-w-sm leading-relaxed"
+        class="text-charcoal/70 max-w-sm leading-relaxed"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         Thank you — I'll be in touch within 24–48 hours to discuss the details
@@ -278,7 +268,7 @@ const occasions = [
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #4A4040;
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
   .form-input {
@@ -325,7 +315,7 @@ const occasions = [
     text-transform: uppercase;
     border: 1px solid #D9C5C0;
     color: #4A4040;
-    opacity: 0.6;
+    opacity: 0.7;
     padding: 0.5rem 1.5rem;
     transition: all 0.2s;
     cursor: pointer;
@@ -333,7 +323,7 @@ const occasions = [
 
   .fulfillment-pill:hover {
     border-color: #A89BAE;
-    opacity: 0.9;
+    opacity: 1;
   }
 
   .fulfillment-pill-active,
@@ -350,10 +340,10 @@ const occasions = [
   import { z } from 'zod';
   import { orderSchema } from '../lib/orderSchema';
 
-  const form       = document.getElementById('order-form')    as HTMLFormElement;
-  const submitBtn  = document.getElementById('submit-btn')    as HTMLButtonElement;
-  const successMsg = document.getElementById('success-msg')   as HTMLElement;
-  const serverErr  = document.getElementById('server-error')  as HTMLElement;
+  const form        = document.getElementById('order-form')     as HTMLFormElement;
+  const submitBtn   = document.getElementById('submit-btn')     as HTMLButtonElement;
+  const successMsg  = document.getElementById('success-msg')    as HTMLElement;
+  const serverErr   = document.getElementById('server-error')   as HTMLElement;
   const delivFields = document.getElementById('delivery-fields') as HTMLElement;
 
   // ── Delivery toggle ─────────────────────────────────────────
@@ -365,17 +355,17 @@ const occasions = [
 
   // ── Helpers ─────────────────────────────────────────────────
   function showError(field: string, msg: string) {
-    const el = form.querySelector<HTMLElement>(`[data-error="${field}"]`);
+    const el    = form.querySelector<HTMLElement>(`[data-error="${field}"]`);
     const input = form.querySelector<HTMLElement>(`#${field}`) ??
                   form.querySelector<HTMLElement>(`[name="${field}"]`);
-    if (el) { el.textContent = msg; el.classList.remove('hidden'); }
+    if (el)    { el.textContent = msg; el.classList.remove('hidden'); }
     if (input) input.classList.add('input-error');
   }
 
   function clearErrors() {
     form.querySelectorAll('.form-error').forEach(el => {
       el.classList.add('hidden');
-      el.textContent = '';
+      (el as HTMLElement).textContent = '';
     });
     form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
     serverErr.classList.add('hidden');
@@ -385,18 +375,15 @@ const occasions = [
   function collectData(): Record<string, unknown> {
     const fd = new FormData(form);
     return {
-      name:          fd.get('name'),
-      email:         fd.get('email'),
-      phone:         fd.get('phone'),
-      occasion:      fd.get('occasion'),
-      servings:      Number(fd.get('servings')),
-      flavorNotes:   fd.get('flavorNotes'),
-      designNotes:   fd.get('designNotes'),
-      requestedDate: fd.get('requestedDate'),
-      fulfillment:   fd.get('fulfillment'),
-      county:        fd.get('county') ?? undefined,
-      address:       fd.get('address') ?? undefined,
-      referral:      fd.get('referral') ?? undefined,
+      name:           fd.get('name'),
+      email:          fd.get('email'),
+      phone:          fd.get('phone'),
+      cakeSelection:  fd.get('cakeSelection'),
+      requestedDate:  fd.get('requestedDate'),
+      fulfillment:    fd.get('fulfillment'),
+      county:         fd.get('county')  ?? undefined,
+      address:        fd.get('address') ?? undefined,
+      referral:       fd.get('referral') ?? undefined,
     };
   }
 
@@ -437,7 +424,11 @@ const occasions = [
         body:    JSON.stringify(result.data),
       });
 
-      const json = await resp.json() as { success: boolean; error?: string; fieldErrors?: Record<string, string[]> };
+      const json = await resp.json() as {
+        success: boolean;
+        error?: string;
+        fieldErrors?: Record<string, string[]>;
+      };
 
       if (json.success) {
         form.classList.add('hidden');
