@@ -14,6 +14,16 @@ Website for Keri Zhong's custom celebration cake side business — built with As
 | Adapter     | `@astrojs/node` (standalone)                |
 | Hosting     | Docker on personal NAS via Cloudflare Tunnel |
 
+## Cake Offerings
+
+| Cake | Starting Price |
+|------|---------------|
+| Tres Leches Cake | From $65 |
+| Tres Leches Cupcakes | From $48 / dozen |
+| Cheesecake Cupcakes | From $48 / dozen |
+
+Final pricing depends on add-ons (fruit toppings, organic ingredients, decorations, candles, etc.). Sweetness cannot be adjusted.
+
 ## Project Structure
 
 ```
@@ -21,9 +31,9 @@ src/
 ├── layouts/
 │   └── Layout.astro          # Shared shell: Google Fonts, sticky nav, footer
 ├── pages/
-│   ├── index.astro           # Home — 3-col hero + category strip
+│   ├── index.astro           # Home — 3-col hero + warm closing paragraph
 │   ├── about.astro           # About — photo placeholder + story
-│   ├── gallery.astro         # Gallery — responsive grid (real photos TBD)
+│   ├── gallery.astro         # Gallery — responsive grid with prices (real photos TBD)
 │   ├── order.astro           # Order inquiry form
 │   └── api/
 │       └── order.ts          # POST endpoint: server validation + Resend
@@ -57,11 +67,11 @@ npm run dev
 
 ## Environment Variables
 
-| Variable        | Description                                              |
-|-----------------|----------------------------------------------------------|
-| `RESEND_API_KEY` | API key from your [Resend](https://resend.com) dashboard |
-| `TO_EMAIL`       | Owner's real inbox — server-side only, never client-exposed |
-| `FROM_EMAIL`     | Verified sender address in Resend (e.g. `orders@keribakes.com`) |
+| Variable         | Description                                                      |
+|------------------|------------------------------------------------------------------|
+| `RESEND_API_KEY` | API key from your [Resend](https://resend.com) dashboard         |
+| `TO_EMAIL`       | Owner's real inbox — server-side only, never client-exposed      |
+| `FROM_EMAIL`     | Verified sender address in Resend (e.g. `orders@keribakes.com`)  |
 
 Copy `.env.example` to `.env` and populate before running or deploying.
 
@@ -72,6 +82,18 @@ npm run build    # Production build → dist/
 npm run preview  # Preview the production build locally
 npx astro check  # TypeScript type-check all .astro files
 ```
+
+## Project Status
+
+| Phase | Status | Description |
+|-------|--------|-------------|
+| Phase 0 | ✅ Complete | Setup & Tooling |
+| Phase 1 | ✅ Complete | Core Pages (Home, About, Gallery) |
+| Phase 2 | ✅ Complete | Order Form + Resend Email Integration |
+| Phase 3 | 🔲 Not started | Docker + NAS Deployment |
+| Phase 4 | 🔲 Not started | Polish + Launch |
+
+See [CLAUDE.md](./CLAUDE.md) for full phase details and architectural decisions.
 
 ## Deployment
 

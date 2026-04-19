@@ -30,21 +30,53 @@ Typography is loaded via a `<link>` tag in `src/layouts/Layout.astro` and applie
 globally through `@layer base` in `src/styles/global.css`.
 
 ## Pages
-  / (Home)    — Hero (3-col), tagline, category strip, CTA
-  /gallery    — Photo grid of past cakes (placeholder divs, real photos TBD)
-  /about      — Two-column: photo placeholder + Keri's story
+  / (Home)    — Three-column hero section + warm closing paragraph
+  /gallery    — Responsive photo grid; placeholder divs until real photos are added
+  /about      — Two-column: photo placeholder left, Keri's story right
   /order      — Inquiry form with client + server validation, Resend emails
 
-## Order Form Rules (ENFORCE STRICTLY)
+## Cake Offerings
+Only three cakes are offered. Do not add or invent others:
+  1. Tres Leches Cake
+  2. Tres Leches Cupcakes
+  3. Cheesecake Cupcakes
+
+These are the only valid values for `cakeSelection` in the Zod schema and the
+order form dropdown. The gallery also reflects only these three products.
+
+## Order Form Spec (ENFORCE STRICTLY)
 1. Requested date must be >= 7 days from today (client + server)
 2. Delivery only available in Orange County and Los Angeles County
 3. Pickup: no address needed
 4. Delivery: county dropdown (OC/LA only) + full address required
-5. On submit: validate server-side first, then call Resend
-6. Send TWO emails via Resend:
-   - Customer: confirmation (24-48hr response time message)
-   - Owner: full inquiry details to real inbox
-7. Never expose real owner email in any client-side code or response
+5. Cake selection is required — must be one of the three offerings above
+6. Add-ons & Special Requests is OPTIONAL free-text (fruits, candles, organic
+   ingredients, decorations, etc.) — never block submission if empty
+7. Sweetness cannot be adjusted — this is a non-negotiable business rule;
+   do not add a sweetness field or imply it can be changed anywhere on the site
+8. Final price depends on add-ons selected — a note to this effect appears
+   below the cake dropdown on the order form
+9. On submit: validate server-side first, then call Resend
+10. Send TWO emails via Resend:
+    - Customer: confirmation (24-48hr response time message)
+    - Owner: full inquiry details to real inbox
+11. Never expose real owner email in any client-side code or response
+
+## Content Rules
+These rules are standing constraints. Do not reintroduce any of the following:
+
+- **No wedding cakes** — personal/celebration cakes only
+- **No occasion categories** — Birthday, Baby Shower, Graduation, Bespoke, etc.
+  were removed; do not add them back anywhere (form fields, gallery filters, cards)
+- **No flavor preferences field** — removed from order form; do not restore
+- **No design vision field** — removed from order form; do not restore
+- **Sweetness is not adjustable** — never add a sweetness option or field
+- **Only the three listed cake options** — Tres Leches Cake, Tres Leches
+  Cupcakes, Cheesecake Cupcakes; no others
+
+## Key Copy
+About page closing line: "Let's make your special occasion something deliciously
+unforgettable." — do not change this without explicit instruction.
 
 ## Environment Variables (never hardcode)
   RESEND_API_KEY   = from Resend dashboard
@@ -68,7 +100,6 @@ See `.env.example` for the template.
 - Pages in src/pages/
 - API endpoints in src/pages/api/
 - Email templates (plain TS functions returning HTML strings) in src/emails/
-- No wedding cakes — personal/celebration cakes only
 - Keep components small and single-purpose
 
 ## Tailwind CSS Notes
@@ -81,41 +112,60 @@ See `.env.example` for the template.
 
 ---
 
-## Build Status
+## Current State
 
-### ✅ Phase 0 — Setup & Tooling (complete)
-- Astro 6 project scaffolded with TypeScript strict mode
+| Phase | Status | Description |
+|-------|--------|-------------|
+| Phase 0 | ✅ Complete | Setup & Tooling |
+| Phase 1 | ✅ Complete | Core Pages (Home, About, Gallery) |
+| Phase 2 | ✅ Complete | Order Form + Resend Email Integration |
+| Phase 3 | 🔲 Not started | Docker + NAS Deployment |
+| Phase 4 | 🔲 Not started | Polish + Launch |
+
+### ✅ Phase 0 — Setup & Tooling
+- Astro 6 project with TypeScript strict mode
 - Tailwind CSS v4 configured via `@tailwindcss/vite`
 - Custom pastel palette and Google Fonts wired up
 - `@astrojs/node` adapter set to `standalone` mode
 - `.env.example` created; `.gitignore` covers `.env` and `dist/`
 
-### ✅ Phase 1 — Core Pages (complete)
+### ✅ Phase 1 — Core Pages
 - `src/layouts/Layout.astro` — sticky nav (logo left, links right), footer
   with Instagram placeholder and copyright
-- `src/pages/index.astro` — three-column hero + 4-category card strip
-- `src/pages/about.astro` — two-column layout with photo placeholder and story
-- `src/pages/gallery.astro` — responsive 1/2/3-col grid with pastel placeholder
-  cards (name + occasion label); real photos to be swapped in later
+- `src/pages/index.astro` — three-column hero + warm closing paragraph
+- `src/pages/about.astro` — two-column layout: photo placeholder + story
+- `src/pages/gallery.astro` — responsive 1/2/3-col grid; cards show cake name,
+  price range, and short description; real photos to be swapped in later
 
-### ✅ Phase 2 — Order Form + Email (complete)
-- `src/lib/orderSchema.ts` — single Zod v4 schema imported by both client and server
-- `src/pages/order.astro` — full inquiry form:
-  - Name, email, phone, occasion, servings, flavor notes, design notes
-  - Date picker with `min` attribute enforcing 7-day minimum (server-generated)
-  - Pickup / Delivery radio toggle; delivery reveals county dropdown (OC/LA only)
-    and address field
-  - Client-side Zod validation with inline field errors and scroll-to-first-error
+### ✅ Phase 2 — Order Form + Email
+- `src/lib/orderSchema.ts` — single Zod v4 schema used by both client and server;
+  `cakeSelection` enum enforces only the three permitted cake options
+- `src/pages/order.astro` — inquiry form fields:
+  - Name, email, phone (required)
+  - Cake selection dropdown — Tres Leches Cake / Tres Leches Cupcakes /
+    Cheesecake Cupcakes (required)
+  - Add-ons & Special Requests — free-text textarea (optional)
+  - Requested date — min 7 days from today, enforced client + server (required)
+  - Pickup / Delivery toggle; delivery reveals county (OC/LA) + address (required)
+  - How did you hear about me? (optional)
+  - Pricing note below cake dropdown; sweetness note below fulfillment section
+  - Client-side Zod validation with inline errors and scroll-to-first-error
   - POSTs JSON to `/api/order`; shows success state on 200, field errors on 422
 - `src/pages/api/order.ts` — POST endpoint:
-  - Parses JSON body, runs full Zod server validation
+  - Parses JSON body, runs full Zod server-side validation
   - Reads `RESEND_API_KEY`, `TO_EMAIL`, `FROM_EMAIL` from env (never client-exposed)
   - Sends customer confirmation and owner notification emails concurrently
-- `src/emails/customerConfirmation.ts` — styled HTML confirmation for the customer
+- `src/emails/customerConfirmation.ts` — styled HTML confirmation for customer
 - `src/emails/ownerNotification.ts` — styled HTML inquiry summary for Keri
 
-### 🔲 Phase 3 — Docker + NAS Deployment (next up)
+### 🔲 Phase 3 — Docker + NAS Deployment
 - Write Dockerfile (multi-stage: build → node:slim runtime)
 - Write docker-compose.yml for NAS deployment
 - Configure Cloudflare Tunnel to forward to container port 4321
 - Document deployment runbook
+
+### 🔲 Phase 4 — Polish + Launch
+- Swap placeholder divs in gallery for real photos
+- Final copy review with Keri
+- Domain DNS cutover to Cloudflare Tunnel
+- Smoke test on production
