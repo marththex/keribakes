@@ -48,8 +48,8 @@ Gallery cards (one per cake type):
   3. Cheesecake Cupcakes
 
 Order form `cakeSelection` enum values (must match CAKE_OPTIONS in `orderSchema.ts`):
-  1. Tres Leches Cake (6 in)  — serves 4–6
-  2. Tres Leches Cake (8 in)  — serves 8–12
+  1. Tres Leches Cake (6 in)  — serves 6–8
+  2. Tres Leches Cake (8 in)  — serves 10–12
   3. Tres Leches Cupcakes
   4. Cheesecake Cupcakes
 
@@ -59,8 +59,8 @@ Editing that file updates the gallery cards and the order form dropdown simultan
 Do not hardcode prices anywhere else in the codebase.
 
 `PRICING` (order form dropdown, keyed by exact CAKE_OPTIONS values):
-  Tres Leches Cake (6 in): From $45  (serves 4–6)
-  Tres Leches Cake (8 in): From $65  (serves 8–12)
+  Tres Leches Cake (6 in): From $45  (serves 6–8)
+  Tres Leches Cake (8 in): From $65  (serves 10–12)
   Tres Leches Cupcakes:    From $48 / dozen
   Cheesecake Cupcakes:     From $55 / dozen
 
@@ -159,11 +159,11 @@ Astro's `<Image>` component from `astro:assets`.
 Open Graph and Twitter Card meta tags are injected globally in `src/layouts/Layout.astro`.
 Every page gets the same preview image; title and description follow the per-page props.
 
-- **OG image:** `public/images/about/profile-2.jpg` — served at the absolute URL
-  `https://keribakes.com/images/about/profile-2.jpg`
+- **OG image:** `public/images/about/profile-4.jpg` — served at the absolute URL
+  `https://keribakes.com/images/about/profile-4.jpg`
 - `astro.config.mjs` has `site: 'https://keribakes.com'` so `Astro.site` resolves
   the absolute base at build time
-- To swap the preview photo: replace `public/images/about/profile-2.jpg` with a
+- To swap the preview photo: replace `public/images/about/profile-4.jpg` with a
   new image (1200×630px minimum recommended; square 1200×1200 also works well)
 - Do **not** hardcode `https://keribakes.com` in the meta tags — always derive it
   from `Astro.site` so staging/preview deployments don't leak the production URL
