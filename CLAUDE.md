@@ -35,18 +35,39 @@ globally through `@layer base` in `src/styles/global.css`.
 
 ## Pages
   / (Home)    — Three-column hero section + warm closing paragraph
-  /gallery    — Responsive photo grid; placeholder divs until real photos are added
+  /desserts   — Responsive photo grid; placeholder divs until real photos are added
   /about      — Two-column: photo placeholder left, Keri's story right
   /order      — Inquiry form with client + server validation, Resend emails
 
 ## Cake Offerings
-Only three cakes are offered. Do not add or invent others:
-  1. Tres Leches Cake
+Only three gallery cards / four order-form options are offered. Do not add or invent others.
+
+Gallery cards (one per cake type):
+  1. Tres Leches Cake  (shown as a single card; customers pick 6 in or 8 in on the order form)
   2. Tres Leches Cupcakes
   3. Cheesecake Cupcakes
 
-These are the only valid values for `cakeSelection` in the Zod schema and the
-order form dropdown. The gallery also reflects only these three products.
+Order form `cakeSelection` enum values (must match CAKE_OPTIONS in `orderSchema.ts`):
+  1. Tres Leches Cake (6 in)  — serves 4–6
+  2. Tres Leches Cake (8 in)  — serves 8–12
+  3. Tres Leches Cupcakes
+  4. Cheesecake Cupcakes
+
+## Pricing
+Prices are defined in `src/lib/pricing.ts` — this is the **single source of truth**.
+Editing that file updates the gallery cards and the order form dropdown simultaneously.
+Do not hardcode prices anywhere else in the codebase.
+
+`PRICING` (order form dropdown, keyed by exact CAKE_OPTIONS values):
+  Tres Leches Cake (6 in): From $45  (serves 4–6)
+  Tres Leches Cake (8 in): From $65  (serves 8–12)
+  Tres Leches Cupcakes:    From $48 / dozen
+  Cheesecake Cupcakes:     From $55 / dozen
+
+`GALLERY_CARD_PRICE` (gallery card display, shows lowest starting price per product):
+  Tres Leches Cake:     From $45
+  Tres Leches Cupcakes: From $48 / dozen
+  Cheesecake Cupcakes:  From $55 / dozen
 
 ## Order Form Spec (ENFORCE STRICTLY)
 1. Requested date must be >= 7 days from today (client + server)
@@ -104,14 +125,14 @@ All real photos are now live. Images are stored in `public/images/` and served s
 - Active dot indicators: filled dot = current photo, outlined = others
 - CSS filter on all images: `brightness(1.05) contrast(1.08) saturate(1.1)` for consistent tone
 - Warm overlay via `::after` pseudo-element on `.img-wrapper` (rgba(255,245,235,0.08), multiply)
-- To add more photos: add `detail-4.jpg` etc. and append to `allImages` in `gallery.astro`
+- To add more photos: add `detail-4.jpg` etc. and append to `allImages` in `desserts.astro`
 
-**How the gallery is structured (`src/pages/gallery.astro` + `src/components/CakeGalleryCard.astro`):**
+**How the gallery is structured (`src/pages/desserts.astro` + `src/components/CakeGalleryCard.astro`):**
 - Gallery page shows exactly **3 cards** — one per cake
 - Each card: name, price, description below; in-card photo carousel above
 - `allImages[0]` is always `main.jpg` (the starting photo); no separate `mainImage` prop
 - To add more detail photos: add `detail-4.jpg` etc. to the cake folder and append the
-  path to the relevant `allImages` array in `gallery.astro`
+  path to the relevant `allImages` array in `desserts.astro`
 
 **How the about slideshow works (`src/components/ProfileSlideshow.astro`):**
 - Auto-advances every 4 seconds with a CSS opacity fade
@@ -205,7 +226,7 @@ All animation styles live in `src/styles/animations.css` (imported by Layout.ast
 - `src/pages/about.astro` — two-column layout: ProfileSlideshow left, story right
 - `src/components/CakeGalleryCard.astro` — card component with in-card photo carousel
   (left/right arrows, active dots, fade transition, swipe support); CSS filter + warm overlay
-- `src/pages/gallery.astro` — 3-card grid (one per cake); Instagram link below Order Now
+- `src/pages/desserts.astro` — 3-card grid (one per cake); Instagram link below Order Now
 
 ### ✅ Phase 2 — Order Form + Email
 - `src/lib/orderSchema.ts` — single Zod v4 schema; exports `CAKE_OPTIONS`, `TIME_SLOTS`,

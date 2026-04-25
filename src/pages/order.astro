@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { CAKE_OPTIONS, TIME_SLOTS, REFERRAL_OPTIONS } from '../lib/orderSchema';
+import { PRICING } from '../lib/pricing';
 
 // Minimum date (server-side, for setting the <input min> attribute)
 const minDate = new Date();
@@ -82,14 +83,14 @@ const minDateStr = minDate.toISOString().split('T')[0];
           class="text-xs tracking-[0.18em] uppercase text-mauve mb-1"
           style="font-family: var(--font-body); font-weight: 200;"
         >
-          Cake Selection
+          Dessert Selection
         </legend>
 
         <div class="flex flex-col gap-1">
-          <label for="cakeSelection" class="form-label">Select Your Cake *</label>
+          <label for="cakeSelection" class="form-label">Select Your Dessert *</label>
           <select id="cakeSelection" name="cakeSelection" class="form-input">
-            <option value="">Choose a cake…</option>
-            {CAKE_OPTIONS.map(cake => <option value={cake}>{cake}</option>)}
+            <option value="">Choose a dessert…</option>
+            {CAKE_OPTIONS.map(cake => <option value={cake}>{cake} — {PRICING[cake]}</option>)}
           </select>
           <p class="form-error hidden" data-error="cakeSelection"></p>
         </div>
@@ -268,7 +269,7 @@ const minDateStr = minDate.toISOString().split('T')[0];
         and confirm your date. Keep an eye on your inbox (and spam, just in case).
       </p>
       <a
-        href="/gallery"
+        href="/desserts"
         class="text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
         style="font-family: var(--font-body); font-weight: 300;"
       >

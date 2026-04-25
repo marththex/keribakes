@@ -4,9 +4,10 @@ interface Props {
   price: string;
   description: string;
   allImages: string[];
+  sizes?: string[];
 }
 
-const { name, price, description, allImages } = Astro.props;
+const { name, price, description, allImages, sizes } = Astro.props;
 ---
 
 <article class="gallery-card flex flex-col overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
@@ -83,6 +84,16 @@ const { name, price, description, allImages } = Astro.props;
     >
       {description}
     </p>
+    {sizes && (
+      <ul
+        class="flex flex-col gap-0.5 pl-3 border-l border-blush/60"
+        style="font-family: var(--font-body); font-weight: 300; font-size: 0.75rem;"
+      >
+        {sizes.map(s => (
+          <li class="text-charcoal/60">{s}</li>
+        ))}
+      </ul>
+    )}
   </div>
 </article>
 

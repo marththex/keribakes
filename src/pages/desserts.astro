@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CakeGalleryCard from '../components/CakeGalleryCard.astro';
+import { GALLERY_CARD_PRICE } from '../lib/pricing';
 
 const products = [
   {
     name: 'Tres Leches Cake',
-    price: 'From $65',
-    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream. Light, indulgent, and made from scratch.',
+    description: 'A moist, rich sponge soaked in three milks and topped with fresh whipped cream.',
+    sizes: ['6 in (serves 4–6)', '8 in (serves 8–12)'],
     allImages: [
       '/images/gallery/tres-leches-cake/main.jpg',
       '/images/gallery/tres-leches-cake/detail-1.jpg',
@@ -16,7 +17,6 @@ const products = [
   },
   {
     name: 'Tres Leches Cupcakes',
-    price: 'From $48 / dozen',
     description: 'All the flavor of our classic tres leches in individual cupcake form. Perfect for smaller gatherings and easy serving.',
     allImages: [
       '/images/gallery/tres-leches-cupcakes/main.jpg',
@@ -27,7 +27,6 @@ const products = [
   },
   {
     name: 'Cheesecake Cupcakes',
-    price: 'From $48 / dozen',
     description: 'Creamy, dense cheesecake in a handheld size. A crowd favorite with a buttery graham cracker base.',
     allImages: [
       '/images/gallery/cheesecake-cupcakes/main.jpg',
@@ -40,8 +39,8 @@ const products = [
 ---
 
 <Layout
-  title="Gallery — Keri Bakes"
-  description="Browse custom cakes by Keri Bakes."
+  title="Desserts — Keri Bakes"
+  description="Browse custom desserts by Keri Bakes."
 >
 
   <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
@@ -58,7 +57,7 @@ const products = [
         class="text-5xl md:text-6xl text-charcoal"
         style="font-family: var(--font-display); font-weight: 300;"
       >
-        The Gallery
+        Desserts
       </h1>
     </div>
 
@@ -88,9 +87,10 @@ const products = [
       {products.map(product => (
         <CakeGalleryCard
           name={product.name}
-          price={product.price}
+          price={GALLERY_CARD_PRICE[product.name]}
           description={product.description}
           allImages={product.allImages}
+          sizes={product.sizes}
         />
       ))}
     </div>

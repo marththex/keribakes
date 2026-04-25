@@ -14,15 +14,17 @@ Website for Keri Zhong's custom celebration cake side business — built with As
 | Adapter     | `@astrojs/node` (standalone)                |
 | Hosting     | Docker on personal NAS via Cloudflare Tunnel |
 
-## Cake Offerings
+## Cake Offerings & Pricing
 
 | Cake | Starting Price |
 |------|---------------|
 | Tres Leches Cake | From $65 |
 | Tres Leches Cupcakes | From $48 / dozen |
-| Cheesecake Cupcakes | From $48 / dozen |
+| Cheesecake Cupcakes | From $55 / dozen |
 
 Final pricing depends on add-ons (fruit toppings, organic ingredients, decorations, candles, etc.). Sweetness cannot be adjusted.
+
+**To update prices:** edit `src/lib/pricing.ts` — that file is the single source of truth. Changes there automatically update the gallery cards and the order form dropdown.
 
 ## Photos
 
@@ -37,9 +39,9 @@ All photos live in `public/images/` and are served as static files.
 
 **To replace about photos:** swap files in `public/images/about/`, keeping the same filenames (`profile-1.jpg` etc.).
 
-**To add more gallery detail photos:** add `detail-4.jpg` etc. to the relevant cake folder, then append the path to that product's `detailImages` array in `src/pages/gallery.astro`.
+**To add more gallery detail photos:** add `detail-4.jpg` etc. to the relevant cake folder, then append the path to that product's `detailImages` array in `src/pages/desserts.astro`.
 
-**To add a new cake product:** add a folder under `public/images/gallery/`, add `main.jpg` + detail photos, then add a new entry to the `products` array in `src/pages/gallery.astro` and to `CAKE_OPTIONS` in `src/lib/orderSchema.ts`.
+**To add a new cake product:** add a folder under `public/images/gallery/`, add `main.jpg` + detail photos, then add a new entry to the `products` array in `src/pages/desserts.astro` and to `CAKE_OPTIONS` in `src/lib/orderSchema.ts`.
 
 ## Project Structure
 
@@ -52,7 +54,7 @@ src/
 ├── pages/
 │   ├── index.astro            # Home — 3-col hero + warm closing paragraph
 │   ├── about.astro            # About — ProfileSlideshow + story
-│   ├── gallery.astro          # Gallery — 12-card grid (real photos)
+│   ├── desserts.astro          # Gallery — 12-card grid (real photos)
 │   ├── order.astro            # Order inquiry form
 │   └── api/
 │       └── order.ts           # POST endpoint: server validation + Resend

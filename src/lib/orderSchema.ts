@@ -13,7 +13,8 @@ export const COUNTIES = ['Orange County', 'Los Angeles County'] as const;
 export type County = (typeof COUNTIES)[number];
 
 export const CAKE_OPTIONS = [
-  'Tres Leches Cake',
+  'Tres Leches Cake (6 in)',
+  'Tres Leches Cake (8 in)',
   'Tres Leches Cupcakes',
   'Cheesecake Cupcakes',
 ] as const;
