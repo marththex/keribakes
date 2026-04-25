@@ -75,7 +75,8 @@ Do not hardcode prices anywhere else in the codebase.
    (defined in `TIME_SLOTS` export in `orderSchema.ts`)
 3. Delivery only available in Orange County and Los Angeles County
 4. Pickup: no address needed
-5. Delivery: county dropdown (OC/LA only) + full address required
+5. Delivery: county dropdown (OC/LA only) + street address, apt/unit (optional),
+   city, and ZIP code — each a separate field, all required except apt/unit
 6. Cake selection is required — must be one of the three offerings above
 7. Add-ons & Special Requests is OPTIONAL free-text (fruits, candles, organic
    ingredients, decorations, etc.) — never block submission if empty
@@ -85,7 +86,9 @@ Do not hardcode prices anywhere else in the codebase.
    below the cake dropdown on the order form
 10. How Did You Hear: dropdown (Instagram / Facebook / Word of mouth / Google Search /
     TikTok / Referred by a friend / Other); selecting "Other" reveals a text input
-    (required only when Other is selected) — field names: `referral` + `referralOther`
+    (required only when Other is selected); selecting "Referred by a friend" reveals a
+    friend name input (required only when that option is selected) —
+    field names: `referral`, `referralOther`, `referralFriend`
 11. On submit: validate server-side first, then call Resend
 12. Send TWO emails via Resend:
     - Customer: confirmation (24-48hr response time message)
@@ -184,6 +187,11 @@ All animation styles live in `src/styles/animations.css` (imported by Layout.ast
 - All form data typed and validated with Zod v4 schemas
 - Zod schema lives in `src/lib/orderSchema.ts` — imported by both the page
   script (client-side) and the API endpoint (server-side) from one source of truth
+- Use `process.env` (not `import.meta.env`) for server-side runtime env vars in API
+  routes — `import.meta.env` bakes values at build time and will be `undefined` in Docker
+- Linting: ESLint 9 flat config (`eslint.config.js`) with `eslint-plugin-astro` +
+  `typescript-eslint`; run with `npm run lint`
+- Tests: Vitest (`src/tests/`); run with `npm test`; covers order schema business rules
 - Components in src/components/
 - Pages in src/pages/
 - API endpoints in src/pages/api/
@@ -202,62 +210,4 @@ All animation styles live in `src/styles/animations.css` (imported by Layout.ast
 
 ## Current State
 
-| Phase | Status | Description |
-|-------|--------|-------------|
-| Phase 0 | ✅ Complete | Setup & Tooling |
-| Phase 1 | ✅ Complete | Core Pages (Home, About, Gallery — all with real photos) |
-| Phase 2 | ✅ Complete | Order Form + Resend Email Integration |
-| Phase 3 | 🔲 Not started | Docker + NAS Deployment |
-| Phase 4 | 🔲 Not started | Polish + Launch |
-
-### ✅ Phase 0 — Setup & Tooling
-- Astro 6 project with TypeScript strict mode
-- Tailwind CSS v4 configured via `@tailwindcss/vite`
-- Custom pastel palette and Google Fonts wired up
-- `@astrojs/node` adapter set to `standalone` mode
-- `.env.example` created; `.gitignore` covers `.env` and `dist/`
-
-### ✅ Phase 1 — Core Pages
-- `src/layouts/Layout.astro` — sticky nav (logo left, links right), footer
-  with Instagram placeholder and copyright
-- `src/pages/index.astro` — three-column hero + warm closing paragraph
-- `src/components/ProfileSlideshow.astro` — auto-advancing photo slideshow (5 photos,
-  4s interval, dot navigation) used on the About page
-- `src/pages/about.astro` — two-column layout: ProfileSlideshow left, story right
-- `src/components/CakeGalleryCard.astro` — card component with in-card photo carousel
-  (left/right arrows, active dots, fade transition, swipe support); CSS filter + warm overlay
-- `src/pages/desserts.astro` — 3-card grid (one per cake); Instagram link below Order Now
-
-### ✅ Phase 2 — Order Form + Email
-- `src/lib/orderSchema.ts` — single Zod v4 schema; exports `CAKE_OPTIONS`, `TIME_SLOTS`,
-  `REFERRAL_OPTIONS`, `COUNTIES`; `cakeSelection` enum enforces only the three permitted options
-- `src/pages/order.astro` — inquiry form fields:
-  - Name, email, phone (required)
-  - Cake selection dropdown — Tres Leches Cake / Tres Leches Cupcakes /
-    Cheesecake Cupcakes (required)
-  - Add-ons & Special Requests — free-text textarea (optional)
-  - Requested date + Preferred Time (side-by-side on desktop); both required;
-    time slots 10:00 AM–6:00 PM in 1-hour increments
-  - Pickup / Delivery toggle; delivery reveals county (OC/LA) + address (required)
-  - How did you hear? — dropdown with Other → text reveal (referral + referralOther)
-  - Pricing note below cake dropdown; sweetness note below fulfillment section
-  - Client-side Zod validation with inline errors and scroll-to-first-error
-  - POSTs JSON to `/api/order`; shows success state on 200, field errors on 422
-- `src/pages/api/order.ts` — POST endpoint:
-  - Parses JSON body, runs full Zod server-side validation
-  - Reads `RESEND_API_KEY`, `TO_EMAIL`, `FROM_EMAIL` from env (never client-exposed)
-  - Sends customer confirmation and owner notification emails concurrently
-- `src/emails/customerConfirmation.ts` — styled HTML confirmation for customer
-- `src/emails/ownerNotification.ts` — styled HTML inquiry summary for Keri
-
-### 🔲 Phase 3 — Docker + NAS Deployment
-- Write Dockerfile (multi-stage: build → node:slim runtime)
-- Write docker-compose.yml for NAS deployment
-- Configure Cloudflare Tunnel to forward to container port 4321
-- Document deployment runbook
-
-### 🔲 Phase 4 — Polish + Launch
-- Swap placeholder divs in gallery for real photos
-- Final copy review with Keri
-- Domain DNS cutover to Cloudflare Tunnel
-- Smoke test on production
+All phases complete. Site is live at keribakes.com.

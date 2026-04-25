@@ -42,8 +42,21 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Smoke test
+      - name: Unit tests
         run: npm test
+
+      - name: Smoke test (HTTP)
+        run: |
+          RESEND_API_KEY=test TO_EMAIL=test@test.com FROM_EMAIL=from@test.com \
+            node dist/server/entry.mjs &
+          SERVER_PID=$!
+          for i in $(seq 1 15); do
+            curl -sf http://localhost:4321/ && break || sleep 1
+          done
+          curl -sf http://localhost:4321/desserts
+          curl -sf http://localhost:4321/about
+          curl -sf http://localhost:4321/order
+          kill $SERVER_PID
 
       - name: Dependency audit
         run: npm audit --audit-level=high
