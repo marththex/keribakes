@@ -10,14 +10,14 @@ interface Props {
 
 const {
   title = 'Keri Bakes',
-  description = 'Custom celebration cakes baked with love in Orange County.',
+  description = 'Baked with love in Orange County — custom cakes and cupcakes by Keri.',
 } = Astro.props;
 
 const navLinks = [
-  { label: 'Home',    href: '/'        },
-  { label: 'Desserts', href: '/desserts' },
-  { label: 'About',   href: '/about'   },
-  { label: 'Order',   href: '/order'   },
+  { label: 'Home',     href: '/'         },
+  { label: 'Desserts', href: '/desserts'  },
+  { label: 'About',    href: '/about'    },
+  { label: 'Order',    href: '/order'    },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -64,8 +64,8 @@ const currentPath = Astro.url.pathname;
           Keri Bakes
         </a>
 
-        <!-- Desktop Links -->
-        <ul class="hidden sm:flex items-center gap-8">
+        <!-- Desktop nav links (md = 768px+) -->
+        <ul class="hidden md:flex items-center gap-8">
           {navLinks.map(link => (
             <li>
               <a
@@ -84,21 +84,45 @@ const currentPath = Astro.url.pathname;
           ))}
         </ul>
 
-        <!-- Mobile menu hint (hamburger-free for now, links stack on small screens) -->
-        <ul class="flex sm:hidden items-center gap-4">
-          {navLinks.map(link => (
+        <!-- Hamburger button (mobile only, below md) -->
+        <button
+          id="mobile-menu-btn"
+          aria-label="Open menu"
+          aria-expanded="false"
+          type="button"
+          class="flex md:hidden flex-col justify-center items-center w-11 h-11 gap-[5px] -mr-1 flex-shrink-0"
+        >
+          <span class="ham-line"></span>
+          <span class="ham-line"></span>
+          <span class="ham-line"></span>
+        </button>
+      </nav>
+
+      <!-- Mobile drawer (slides down inside sticky header) -->
+      <div id="mobile-menu" class="mobile-drawer md:hidden">
+        <ul>
+          {navLinks.filter(l => l.label !== 'Order').map(link => (
             <li>
               <a
                 href={link.href}
-                class="text-xs text-charcoal/70 hover:text-charcoal transition-colors"
-                style="font-family: var(--font-body); font-weight: 300;"
+                class="mobile-nav-link"
+                style="font-family: var(--font-body);"
               >
                 {link.label}
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href="/order"
+              class="mobile-nav-order"
+              style="font-family: var(--font-body);"
+            >
+              Order
+            </a>
+          </li>
         </ul>
-      </nav>
+      </div>
     </header>
 
     <!-- Page content -->
@@ -108,7 +132,7 @@ const currentPath = Astro.url.pathname;
 
     <!-- Footer -->
     <footer class="bg-charcoal text-cream/80 mt-auto">
-      <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
         <span
           class="text-xl tracking-wide"
           style="font-family: var(--font-display); font-weight: 300;"
@@ -143,6 +167,78 @@ const currentPath = Astro.url.pathname;
   </body>
 </html>
 
+<style>
+  /* ── Hamburger lines ─────────────────────────────────── */
+  .ham-line {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: #4A4040;
+    border-radius: 1px;
+    transform-origin: center;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  #mobile-menu-btn.is-open .ham-line:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  #mobile-menu-btn.is-open .ham-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  #mobile-menu-btn.is-open .ham-line:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  /* ── Mobile drawer ───────────────────────────────────── */
+  .mobile-drawer {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    background: #FDFAF7;
+    box-shadow: 0 4px 16px rgba(74, 64, 64, 0.08);
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+  .mobile-drawer.is-open {
+    max-height: 320px;
+    opacity: 1;
+  }
+
+  .mobile-nav-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    font-weight: 300;
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4A4040;
+    border-bottom: 1px solid rgba(217, 197, 192, 0.5);
+    transition: color 0.2s;
+  }
+  .mobile-nav-link:hover,
+  .mobile-nav-link:active {
+    color: #A89BAE;
+  }
+
+  .mobile-nav-order {
+    display: block;
+    margin: 0.875rem 1.5rem 1rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 300;
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+    background: #C4B8C8;
+    color: #4A4040;
+    transition: background 0.2s, color 0.2s;
+  }
+  .mobile-nav-order:hover,
+  .mobile-nav-order:active {
+    background: #A89BAE;
+    color: #fff;
+  }
+</style>
+
 <script>
   // Stagger animate-on-load elements on first visit
   document.addEventListener('astro:page-load', () => {
@@ -164,5 +260,38 @@ const currentPath = Astro.url.pathname;
       { threshold: 0.12 }
     );
     document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+  });
+</script>
+
+<script>
+  // ── Hamburger menu — re-initialised on every page navigation ──
+  let menuController: AbortController | null = null;
+
+  document.addEventListener('astro:page-load', () => {
+    menuController?.abort();
+    menuController = new AbortController();
+    const { signal } = menuController;
+
+    const btn  = document.getElementById('mobile-menu-btn') as HTMLButtonElement | null;
+    const menu = document.getElementById('mobile-menu')     as HTMLElement | null;
+    if (!btn || !menu) return;
+
+    // Reset to closed on each page load / navigation
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    menu.classList.remove('is-open');
+
+    const openMenu  = () => { btn.classList.add('is-open');    btn.setAttribute('aria-expanded', 'true');  menu.classList.add('is-open');    };
+    const closeMenu = () => { btn.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); menu.classList.remove('is-open'); };
+
+    btn.addEventListener('click', () => btn.classList.contains('is-open') ? closeMenu() : openMenu(), { signal });
+
+    // Close when any nav link is tapped
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu, { signal }));
+
+    // Close when tapping outside
+    document.addEventListener('click', (e) => {
+      if (!btn.contains(e.target as Node) && !menu.contains(e.target as Node)) closeMenu();
+    }, { signal });
   });
 </script>

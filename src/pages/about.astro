@@ -8,38 +8,38 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
   description="Meet Keri — the baker behind the cakes."
 >
 
-  <section class="max-w-5xl mx-auto px-6 py-20 md:py-28">
+  <section class="max-w-5xl mx-auto px-6 py-14 md:py-28">
 
     <!-- Section label -->
     <p
-      class="animate-on-load text-xs tracking-[0.2em] uppercase text-mauve mb-12 text-center"
+      class="animate-on-load text-xs tracking-[0.2em] uppercase text-mauve mb-10 md:mb-12 text-center"
       style="font-family: var(--font-body); font-weight: 200;"
     >
       The Baker
     </p>
 
-    <!-- Two-column layout -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
+    <!-- Two-column layout: stacks on mobile -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
 
-      <!-- Left: photo slideshow -->
+      <!-- Photo slideshow — full width on mobile -->
       <div class="animate-on-load flex flex-col gap-4">
         <ProfileSlideshow />
         <!-- Accent bar -->
         <div class="h-0.5 w-16 bg-mauve/40 ml-1"></div>
       </div>
 
-      <!-- Right: story text -->
-      <div class="animate-on-load flex flex-col gap-8 pt-2">
+      <!-- Story text -->
+      <div class="animate-on-load flex flex-col gap-8 md:pt-2">
         <h1
-          class="text-5xl md:text-6xl leading-tight text-charcoal"
-          style="font-family: var(--font-display); font-weight: 300;"
+          class="leading-tight text-charcoal"
+          style="font-family: var(--font-display); font-weight: 300; font-size: clamp(2.5rem, 8vw, 3.75rem);"
         >
           Hi, I'm Keri.
         </h1>
 
         <div
-          class="flex flex-col gap-5 text-charcoal/70 leading-relaxed"
-          style="font-family: var(--font-body); font-weight: 300;"
+          class="flex flex-col gap-5 text-charcoal/70"
+          style="font-family: var(--font-body); font-weight: 300; line-height: 1.8;"
         >
           <p>
             Baking has always been my love language. Long before it became a
@@ -64,11 +64,9 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
         </div>
 
         <!-- Accent quote -->
-        <blockquote
-          class="border-l-2 border-lavender pl-5 mt-2"
-        >
+        <blockquote class="border-l-2 border-lavender pl-5 mt-2">
           <p
-            class="text-2xl italic text-charcoal/50 leading-snug"
+            class="text-xl md:text-2xl italic text-charcoal/50 leading-snug"
             style="font-family: var(--font-display); font-weight: 300;"
           >
             "Every cake tells a story — let's make yours delicious."
@@ -79,7 +77,7 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
         <div class="pt-4 flex flex-col gap-4">
           <a
             href="/order"
-            class="btn-lift inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-6 py-3 transition-all duration-300"
+            class="btn-lift w-full md:w-auto text-center md:inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/30 text-charcoal/70 hover:border-mauve hover:text-mauve px-6 py-4 md:py-3 transition-all duration-300"
             style="font-family: var(--font-body); font-weight: 300;"
           >
             Order a Cake
@@ -88,7 +86,7 @@ import ProfileSlideshow from '../components/ProfileSlideshow.astro';
             href="https://www.instagram.com/keribakesoc/"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 text-sm text-charcoal/50 hover:text-mauve transition-colors duration-300"
+            class="inline-flex items-center justify-center md:justify-start gap-2 text-sm text-charcoal/50 hover:text-mauve transition-colors duration-300"
             style="font-family: var(--font-body); font-weight: 300;"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

@@ -104,19 +104,10 @@ src/
 
 ## Deployment
 
-CD is handled by `.github/workflows/deploy.yml`. On push to `main` it SSHes into the NAS via `ssh.marcuslchong.com` (Cloudflare Access TCP), pulls latest, and runs `docker compose up -d --build`. The container serves the Node.js server behind Nginx Proxy Manager at `keribakes.com`.
-
-| Detail | Value |
-|---|---|
-| Container | `keribakes` |
-| Host port | `3002 → 4321` |
-| NAS path | `/nfs/keribakes` |
-| Tunnel | `marcuslchong-tunnel` → NPM → container |
+CD is handled by `.github/workflows/deploy.yml`. On push to `main` it SSHes into the NAS via Cloudflare Access TCP, pulls latest, and runs `docker compose up -d --build`. The container serves the Node.js server behind Nginx Proxy Manager at `keribakes.com`.
 
 Manual redeploy:
 
 ```bash
 cd /nfs/keribakes && docker compose up -d --build
 ```
-
-See [CLAUDE.md](./CLAUDE.md) for full architectural decisions and content rules.

@@ -17,6 +17,18 @@
   }
   .scroll-reveal.is-visible { opacity: 1; transform: none; }
 
+  /* Reduce translateY distance on mobile for smoother feel */
+  @media (max-width: 767px) {
+    .first-load .animate-on-load {
+      transform: translateY(10px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .scroll-reveal {
+      transform: translateY(10px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+  }
+
   /* ─── View Transitions ─────────────────────────────────────── */
   /* Root swaps instantly — header/footer stay stable */
   ::view-transition-old(root), ::view-transition-new(root) {
@@ -43,15 +55,33 @@
                 border-color 0.2s ease-out;
   }
   .btn-lift:hover  { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(74,64,64,0.15); }
-  .btn-lift:active { transform: translateY(0); transition-duration: 0.1s; }
+  .btn-lift:active { transform: scale(0.97); transition-duration: 0.1s; box-shadow: none; }
 
   /* ─── Gallery card hover ───────────────────────────────────── */
   .gallery-card { transition: transform 0.25s ease-out, box-shadow 0.25s ease-out; }
   .gallery-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(74,64,64,0.12); }
+
+  /* Arrows: hover-reveal on desktop, always visible on mobile */
   .gallery-card .carousel-prev,
-  .gallery-card .carousel-next { opacity: 0.7; transition: opacity 0.2s ease; }
+  .gallery-card .carousel-next {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
   .gallery-card:hover .carousel-prev,
   .gallery-card:hover .carousel-next { opacity: 1; }
+}
+
+/* Always show gallery arrows on touch/mobile screens */
+@media (max-width: 767px) {
+  .gallery-card .carousel-prev,
+  .gallery-card .carousel-next {
+    opacity: 0.85 !important;
+  }
+  /* Disable card lift on mobile (no hover state on touch) */
+  .gallery-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }
 
 /* ─── Nav underline — applies always; reduced-motion: instant ── */

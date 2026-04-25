@@ -43,10 +43,10 @@ const products = [
   description="Browse custom desserts by Keri Bakes."
 >
 
-  <section class="max-w-6xl mx-auto px-6 py-20 md:py-28">
+  <section class="max-w-6xl mx-auto px-6 py-14 md:py-28">
 
     <!-- Header -->
-    <div class="animate-on-load mb-10 text-center">
+    <div class="animate-on-load mb-8 md:mb-10 text-center">
       <p
         class="text-xs tracking-[0.2em] uppercase text-mauve mb-4"
         style="font-family: var(--font-body); font-weight: 200;"
@@ -54,18 +54,18 @@ const products = [
         Past Work
       </p>
       <h1
-        class="text-5xl md:text-6xl text-charcoal"
-        style="font-family: var(--font-display); font-weight: 300;"
+        class="text-charcoal"
+        style="font-family: var(--font-display); font-weight: 300; font-size: clamp(2.5rem, 8vw, 3.75rem);"
       >
         Desserts
       </h1>
     </div>
 
-    <!-- Order CTA — top, right-aligned -->
-    <div class="flex flex-col items-end gap-2 mb-10">
+    <!-- Order CTA — centered on mobile, right-aligned on desktop -->
+    <div class="flex flex-col items-center md:items-end gap-2 mb-10">
       <a
         href="/order"
-        class="btn-lift text-xs tracking-[0.2em] uppercase bg-charcoal text-cream hover:bg-mauve px-8 py-3 transition-colors duration-300"
+        class="btn-lift w-full md:w-auto text-center text-xs tracking-[0.2em] uppercase bg-charcoal text-cream hover:bg-mauve px-8 py-4 md:py-3 transition-colors duration-300"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         Order Now
@@ -82,8 +82,8 @@ const products = [
       </a>
     </div>
 
-    <!-- 3-card grid — one card per cake -->
-    <div class="scroll-reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- 3-card grid: 1-col mobile, 2-col tablet, 3-col desktop -->
+    <div class="scroll-reveal grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {products.map(product => (
         <CakeGalleryCard
           name={product.name}
@@ -105,7 +105,7 @@ const products = [
       </p>
       <a
         href="/order"
-        class="btn-lift inline-block text-xs tracking-[0.2em] uppercase border border-charcoal/40 text-charcoal/80 hover:border-mauve hover:text-mauve px-8 py-3 transition-all duration-300"
+        class="btn-lift inline-block w-full md:w-auto text-xs tracking-[0.2em] uppercase border border-charcoal/40 text-charcoal/80 hover:border-mauve hover:text-mauve px-8 py-4 md:py-3 transition-all duration-300"
         style="font-family: var(--font-body); font-weight: 300;"
       >
         Place an Order

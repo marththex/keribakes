@@ -14,7 +14,8 @@ const { name, price, description, allImages, sizes } = Astro.props;
 
   <!-- Image carousel -->
   <div class="relative" data-carousel>
-    <div class="relative aspect-square overflow-hidden img-wrapper">
+    <!-- 16:10 on mobile (compact card), square on md+ -->
+    <div class="relative aspect-[16/10] md:aspect-square overflow-hidden img-wrapper">
       {allImages.map((src, i) => (
         <img
           src={src}
@@ -27,9 +28,9 @@ const { name, price, description, allImages, sizes } = Astro.props;
       ))}
     </div>
 
-    <!-- Left arrow -->
+    <!-- Left arrow — 44px tap target on mobile, 32px on desktop -->
     <button
-      class="carousel-prev absolute left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/60 hover:bg-white/85 flex items-center justify-center transition-colors duration-200"
+      class="carousel-prev absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 md:w-8 md:h-8 rounded-full bg-white/60 hover:bg-white/85 flex items-center justify-center transition-colors duration-200"
       aria-label="Previous photo"
       type="button"
     >
@@ -38,9 +39,9 @@ const { name, price, description, allImages, sizes } = Astro.props;
       </svg>
     </button>
 
-    <!-- Right arrow -->
+    <!-- Right arrow — 44px tap target on mobile, 32px on desktop -->
     <button
-      class="carousel-next absolute right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/60 hover:bg-white/85 flex items-center justify-center transition-colors duration-200"
+      class="carousel-next absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 md:w-8 md:h-8 rounded-full bg-white/60 hover:bg-white/85 flex items-center justify-center transition-colors duration-200"
       aria-label="Next photo"
       type="button"
     >
@@ -50,11 +51,11 @@ const { name, price, description, allImages, sizes } = Astro.props;
     </button>
   </div>
 
-  <!-- Dot indicators -->
+  <!-- Dot indicators — slightly larger on mobile for easier tapping -->
   <div class="flex justify-center gap-2 py-3 bg-cream">
     {allImages.map((_, i) => (
       <button
-        class={`w-2 h-2 rounded-full border transition-all duration-300 ${i === 0 ? 'bg-mauve border-mauve' : 'bg-transparent border-mauve/50'}`}
+        class={`w-2.5 h-2.5 md:w-2 md:h-2 rounded-full border transition-all duration-300 ${i === 0 ? 'bg-mauve border-mauve' : 'bg-transparent border-mauve/50'}`}
         data-dot={i}
         aria-label={`Go to photo ${i + 1}`}
         type="button"
@@ -147,7 +148,7 @@ const { name, price, description, allImages, sizes } = Astro.props;
     }, { passive: true });
     carousel.addEventListener('touchend', (e) => {
       const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+      if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
     }, { passive: true });
   }
 

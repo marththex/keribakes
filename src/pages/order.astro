@@ -13,10 +13,10 @@ const minDateStr = minDate.toISOString().split('T')[0];
   title="Order — Keri Bakes"
   description="Place a custom cake inquiry with Keri Bakes."
 >
-  <section class="max-w-2xl mx-auto px-6 py-20 md:py-28">
+  <section class="max-w-2xl mx-auto px-6 py-12 md:py-28">
 
     <!-- Header -->
-    <div class="animate-on-load mb-12 text-center">
+    <div class="animate-on-load mb-10 md:mb-12 text-center">
       <p
         class="text-xs tracking-[0.2em] uppercase text-mauve mb-4"
         style="font-family: var(--font-body); font-weight: 200;"
@@ -24,8 +24,8 @@ const minDateStr = minDate.toISOString().split('T')[0];
         Let's get started
       </p>
       <h1
-        class="text-5xl md:text-6xl text-charcoal"
-        style="font-family: var(--font-display); font-weight: 300;"
+        class="text-charcoal"
+        style="font-family: var(--font-display); font-weight: 300; font-size: clamp(2.5rem, 8vw, 3.75rem);"
       >
         Place an Inquiry
       </h1>
@@ -61,7 +61,8 @@ const minDateStr = minDate.toISOString().split('T')[0];
           <p class="form-error hidden" data-error="name"></p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <!-- Email + phone: side by side on md+, stacked on mobile -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div class="flex flex-col gap-1">
             <label for="email" class="form-label">Email *</label>
             <input id="email" name="email" type="email" autocomplete="email"
@@ -122,7 +123,8 @@ const minDateStr = minDate.toISOString().split('T')[0];
           Date &amp; Fulfillment
         </legend>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <!-- Date + time: always stacked (side by side on md+) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div class="flex flex-col gap-1">
             <label for="requestedDate" class="form-label">
               Requested Date *
@@ -189,7 +191,8 @@ const minDateStr = minDate.toISOString().split('T')[0];
               placeholder="123 Blossom Ave" />
             <p class="form-error hidden" data-error="street"></p>
           </div>
-          <div class="grid grid-cols-2 gap-5">
+          <!-- Apt/Unit + ZIP: stacked on mobile, side by side on md+ -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div class="flex flex-col gap-1">
               <label for="unit" class="form-label">Apt / Suite</label>
               <input id="unit" name="unit" type="text"
@@ -271,12 +274,12 @@ const minDateStr = minDate.toISOString().split('T')[0];
         role="alert"
       ></p>
 
-      <!-- Submit -->
+      <!-- Submit — full width on mobile -->
       <button
         type="submit"
         id="submit-btn"
-        class="btn-lift self-start text-xs tracking-[0.2em] uppercase bg-charcoal text-cream px-10 py-4 hover:bg-mauve transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        style="font-family: var(--font-body); font-weight: 300;"
+        class="btn-lift w-full text-xs tracking-[0.2em] uppercase bg-charcoal text-cream px-10 py-4 hover:bg-mauve transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        style="font-family: var(--font-body); font-weight: 300; min-height: 52px;"
       >
         Send Inquiry
       </button>
@@ -332,12 +335,15 @@ const minDateStr = minDate.toISOString().split('T')[0];
   .form-input {
     font-family: var(--font-body);
     font-weight: 300;
-    font-size: 0.9375rem;
+    /* 16px prevents iOS auto-zoom on focus */
+    font-size: 1rem;
     color: #4A4040;
     background: #fff;
     border: 1px solid #D9C5C0;
     padding: 0.75rem 1rem;
     width: 100%;
+    /* 48px minimum tap target */
+    min-height: 48px;
     outline: none;
     transition: border-color 0.2s;
     appearance: none;
@@ -374,7 +380,10 @@ const minDateStr = minDate.toISOString().split('T')[0];
     border: 1px solid #D9C5C0;
     color: #4A4040;
     opacity: 0.7;
-    padding: 0.5rem 1.5rem;
+    padding: 0.625rem 1.5rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
     transition: all 0.2s;
     cursor: pointer;
   }
