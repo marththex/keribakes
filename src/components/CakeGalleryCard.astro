@@ -14,8 +14,7 @@ const { name, price, description, allImages, sizes } = Astro.props;
 
   <!-- Image carousel -->
   <div class="relative" data-carousel>
-    <!-- 16:10 on mobile (compact card), square on md+ -->
-    <div class="relative aspect-[16/10] md:aspect-square overflow-hidden img-wrapper">
+    <div class="relative aspect-square overflow-hidden img-wrapper">
       {allImages.map((src, i) => (
         <img
           src={src}

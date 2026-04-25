@@ -21,6 +21,9 @@ const navLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
+const siteBase = Astro.site?.href.replace(/\/$/, '') ?? 'https://keribakes.com';
+const ogImage  = `${siteBase}/images/about/profile-2.jpg`;
+const canonical = `${siteBase}${currentPath}`;
 ---
 
 <!doctype html>
@@ -30,6 +33,23 @@ const currentPath = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
+
+    <!-- Open Graph (iMessage, Messenger, WhatsApp, Facebook, Slack…) -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:site_name"   content="Keri Bakes" />
+    <meta property="og:url"         content={canonical} />
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImage} />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:alt"   content="Keri Bakes — handcrafted cakes and cupcakes in Orange County" />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={ogImage} />
 
     <!-- First-load detection (must be inline, not a module) -->
     <script>

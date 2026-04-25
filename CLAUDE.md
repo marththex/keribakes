@@ -155,6 +155,19 @@ Astro's `<Image>` component from `astro:assets`.
 - Write all commit messages in first person, past tense, as the developer
 - Example: "Update order form with add-ons field" — not "Added changes as requested by user"
 
+## Social / Link Preview (Open Graph)
+Open Graph and Twitter Card meta tags are injected globally in `src/layouts/Layout.astro`.
+Every page gets the same preview image; title and description follow the per-page props.
+
+- **OG image:** `public/images/about/profile-2.jpg` — served at the absolute URL
+  `https://keribakes.com/images/about/profile-2.jpg`
+- `astro.config.mjs` has `site: 'https://keribakes.com'` so `Astro.site` resolves
+  the absolute base at build time
+- To swap the preview photo: replace `public/images/about/profile-2.jpg` with a
+  new image (1200×630px minimum recommended; square 1200×1200 also works well)
+- Do **not** hardcode `https://keribakes.com` in the meta tags — always derive it
+  from `Astro.site` so staging/preview deployments don't leak the production URL
+
 ## Environment Variables (never hardcode)
   RESEND_API_KEY   = from Resend dashboard
   TO_EMAIL         = real owner inbox (server-side only)

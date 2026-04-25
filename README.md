@@ -85,6 +85,8 @@ src/
 
 **To replace photos** → swap files in `public/images/about/` (profile) or `public/images/gallery/<cake-slug>/` (gallery). Keep existing filenames.
 
+**To change the link-preview image** (shown when sharing on iMessage, Messenger, WhatsApp, etc.) → replace `public/images/about/profile-2.jpg`. The OG meta tags in `src/layouts/Layout.astro` reference this file. Image should be at least 1200×630px.
+
 ---
 
 ## CI
