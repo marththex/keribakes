@@ -24,9 +24,9 @@ export const POST: APIRoute = async ({ request }) => {
   const data = result.data;
 
   // ── Env vars — never expose these to the client ────────────
-  const resendKey = import.meta.env.RESEND_API_KEY;
-  const toEmail   = import.meta.env.TO_EMAIL;
-  const fromEmail = import.meta.env.FROM_EMAIL;
+  const resendKey = process.env.RESEND_API_KEY;
+  const toEmail   = process.env.TO_EMAIL;
+  const fromEmail = process.env.FROM_EMAIL;
 
   if (!resendKey || !toEmail || !fromEmail) {
     console.error('Missing email environment variables');
