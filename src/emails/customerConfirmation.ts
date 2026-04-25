@@ -42,7 +42,7 @@ export function customerConfirmationHtml(data: OrderFormData): string {
       ${row('Requested Date', data.requestedDate)}
       ${row('Preferred Time', data.preferredTime)}
       ${row('Fulfillment', data.fulfillment === 'delivery' ? `Delivery — ${data.county}` : 'Pickup')}
-      ${data.fulfillment === 'delivery' && data.address ? row('Address', data.address) : ''}
+      ${data.fulfillment === 'delivery' && data.street ? row('Address', [data.street, data.unit, data.city, data.zip ? `CA ${data.zip}` : ''].filter(Boolean).join(', ')) : ''}
 
       <p style="margin-top:28px;">
         Can't wait to bake something special for you!<br/>

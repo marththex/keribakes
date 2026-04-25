@@ -1,15 +1,16 @@
 import type { OrderFormData } from '../lib/orderSchema';
 
 export function ownerNotificationHtml(data: OrderFormData): string {
+  const addressParts = [data.street, data.unit, data.city, data.zip ? `CA ${data.zip}` : ''].filter(Boolean);
   const fulfillmentDetail =
     data.fulfillment === 'delivery'
-      ? `Delivery → ${data.county}${data.address ? ` / ${data.address}` : ''}`
+      ? `Delivery → ${data.county} / ${addressParts.join(', ')}`
       : 'Pickup';
 
   const referralDisplay =
-    data.referral === 'Other'
-      ? (data.referralOther ?? 'Other')
-      : (data.referral ?? '');
+    data.referral === 'Other'              ? (data.referralOther  ?? 'Other')
+    : data.referral === 'Referred by a friend' ? `Referred by a friend: ${data.referralFriend ?? ''}`
+    : (data.referral ?? '');
 
   return `
 <!DOCTYPE html>
@@ -42,6 +43,7 @@ export function ownerNotificationHtml(data: OrderFormData): string {
         <tr><td>Email</td><td><a href="mailto:${escHtml(data.email)}">${escHtml(data.email)}</a></td></tr>
         <tr><td>Phone</td><td>${escHtml(data.phone)}</td></tr>
         <tr><td>Cake</td><td>${escHtml(data.cakeSelection)}</td></tr>
+        ${data.addOns ? `<tr><td>Add-ons</td><td>${escHtml(data.addOns)}</td></tr>` : ''}
         <tr><td>Requested Date</td><td>${escHtml(data.requestedDate)}</td></tr>
         <tr><td>Preferred Time</td><td>${escHtml(data.preferredTime)}</td></tr>
         <tr><td>Fulfillment</td><td>${escHtml(fulfillmentDetail)}</td></tr>

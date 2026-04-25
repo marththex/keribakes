@@ -57,9 +57,14 @@ export const orderSchema = z
       }, `Date must be at least ${MIN_DAYS_AHEAD} days from today`),
     fulfillment: z.enum(['pickup', 'delivery']),
     county: z.string().optional(),
-    address: z.string().optional(),
+    street: z.string().optional(),
+    unit: z.string().optional(),
+    city: z.string().optional(),
+    zip: z.string().optional(),
+    addOns: z.string().optional(),
     referral: z.string().optional(),
     referralOther: z.string().optional(),
+    referralFriend: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.fulfillment === 'delivery') {
@@ -70,11 +75,25 @@ export const orderSchema = z
           message: 'Select Orange County or Los Angeles County',
         });
       }
-      if (!data.address || data.address.trim().length < 5) {
+      if (!data.street || data.street.trim().length < 3) {
         ctx.addIssue({
           code: 'custom',
-          path: ['address'],
-          message: 'Full delivery address is required',
+          path: ['street'],
+          message: 'Street address is required',
+        });
+      }
+      if (!data.city || data.city.trim().length < 2) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['city'],
+          message: 'City is required',
+        });
+      }
+      if (!data.zip || !/^\d{5}$/.test(data.zip)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['zip'],
+          message: 'Enter a valid 5-digit ZIP code',
         });
       }
     }
@@ -86,6 +105,16 @@ export const orderSchema = z
         code: 'custom',
         path: ['referralOther'],
         message: 'Please tell us how you heard about us',
+      });
+    }
+    if (
+      data.referral === 'Referred by a friend' &&
+      (!data.referralFriend || data.referralFriend.trim().length === 0)
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['referralFriend'],
+        message: "Please share your friend's name",
       });
     }
   });

@@ -182,12 +182,39 @@ const minDateStr = minDate.toISOString().split('T')[0];
             <p class="form-error hidden" data-error="county"></p>
           </div>
           <div class="flex flex-col gap-1">
-            <label for="address" class="form-label">Full Delivery Address *</label>
-            <input id="address" name="address" type="text"
-              autocomplete="street-address"
+            <label for="street" class="form-label">Street Address *</label>
+            <input id="street" name="street" type="text"
+              autocomplete="address-line1"
               class="form-input"
-              placeholder="123 Blossom Ave, Irvine, CA 92618" />
-            <p class="form-error hidden" data-error="address"></p>
+              placeholder="123 Blossom Ave" />
+            <p class="form-error hidden" data-error="street"></p>
+          </div>
+          <div class="grid grid-cols-2 gap-5">
+            <div class="flex flex-col gap-1">
+              <label for="unit" class="form-label">Apt / Suite</label>
+              <input id="unit" name="unit" type="text"
+                autocomplete="address-line2"
+                class="form-input"
+                placeholder="Apt 4B (optional)" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label for="zip" class="form-label">ZIP Code *</label>
+              <input id="zip" name="zip" type="text"
+                autocomplete="postal-code"
+                inputmode="numeric"
+                maxlength="5"
+                class="form-input"
+                placeholder="92618" />
+              <p class="form-error hidden" data-error="zip"></p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="city" class="form-label">City *</label>
+            <input id="city" name="city" type="text"
+              autocomplete="address-level2"
+              class="form-input"
+              placeholder="Irvine" />
+            <p class="form-error hidden" data-error="city"></p>
           </div>
         </div>
 
@@ -223,6 +250,16 @@ const minDateStr = minDate.toISOString().split('T')[0];
             placeholder="Please tell us how you heard about us"
           />
           <p class="form-error hidden" data-error="referralOther"></p>
+        </div>
+        <div id="referral-friend-wrapper" class="hidden flex flex-col gap-1 mt-1">
+          <input
+            id="referralFriend"
+            name="referralFriend"
+            type="text"
+            class="form-input"
+            placeholder="Friend's name"
+          />
+          <p class="form-error hidden" data-error="referralFriend"></p>
         </div>
       </fieldset>
 
@@ -375,11 +412,12 @@ const minDateStr = minDate.toISOString().split('T')[0];
   }));
 
   // ── Referral "Other" toggle ──────────────────────────────────
-  const referralSelect       = form.querySelector<HTMLSelectElement>('#referral');
-  const referralOtherWrapper = document.getElementById('referral-other-wrapper') as HTMLElement;
+  const referralSelect        = form.querySelector<HTMLSelectElement>('#referral');
+  const referralOtherWrapper  = document.getElementById('referral-other-wrapper')  as HTMLElement;
+  const referralFriendWrapper = document.getElementById('referral-friend-wrapper') as HTMLElement;
   referralSelect?.addEventListener('change', () => {
-    const isOther = referralSelect.value === 'Other';
-    referralOtherWrapper.classList.toggle('hidden', !isOther);
+    referralOtherWrapper.classList.toggle('hidden',  referralSelect.value !== 'Other');
+    referralFriendWrapper.classList.toggle('hidden', referralSelect.value !== 'Referred by a friend');
   });
 
   // ── Helpers ─────────────────────────────────────────────────
@@ -404,17 +442,22 @@ const minDateStr = minDate.toISOString().split('T')[0];
   function collectData(): Record<string, unknown> {
     const fd = new FormData(form);
     return {
-      name:          fd.get('name'),
-      email:         fd.get('email'),
-      phone:         fd.get('phone'),
-      cakeSelection: fd.get('cakeSelection'),
-      preferredTime: fd.get('preferredTime'),
-      requestedDate: fd.get('requestedDate'),
-      fulfillment:   fd.get('fulfillment'),
-      county:        fd.get('county')        ?? undefined,
-      address:       fd.get('address')       ?? undefined,
-      referral:      fd.get('referral')      ?? undefined,
-      referralOther: fd.get('referralOther') ?? undefined,
+      name:           fd.get('name'),
+      email:          fd.get('email'),
+      phone:          fd.get('phone'),
+      cakeSelection:  fd.get('cakeSelection'),
+      addOns:         fd.get('addOns')          ?? undefined,
+      preferredTime:  fd.get('preferredTime'),
+      requestedDate:  fd.get('requestedDate'),
+      fulfillment:    fd.get('fulfillment'),
+      county:         fd.get('county')          ?? undefined,
+      street:         fd.get('street')          ?? undefined,
+      unit:           fd.get('unit')            ?? undefined,
+      city:           fd.get('city')            ?? undefined,
+      zip:            fd.get('zip')             ?? undefined,
+      referral:       fd.get('referral')        ?? undefined,
+      referralOther:  fd.get('referralOther')   ?? undefined,
+      referralFriend: fd.get('referralFriend')  ?? undefined,
     };
   }
 
