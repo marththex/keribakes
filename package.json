@@ -14,6 +14,9 @@
     "url": "git+https://github.com/marththex/keribakes.git"
   },
   "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
     "@astrojs/node": "^10.0.5",
