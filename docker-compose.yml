@@ -1,0 +1,22 @@
+services:
+
+  keribakes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: keribakes
+    restart: unless-stopped
+    ports:
+      - "3001:4321"
+    environment:
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - TO_EMAIL=${TO_EMAIL}
+      - FROM_EMAIL=${FROM_EMAIL}
+    networks:
+      - proxy
+
+# ── Network ───────────────────────────────────────────────────────────────────
+networks:
+  proxy:
+    external: true
+    name: nfs-network

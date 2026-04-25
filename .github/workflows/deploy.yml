@@ -1,0 +1,60 @@
+name: Deploy to NAS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --include=optional
+
+      # Use locally installed tsc from node_modules, not npx
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Install cloudflared
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cloudflared.deb
+          sudo dpkg -i cloudflared.deb
+
+      - name: Deploy to NAS
+        env:
+          SSH_KEY: ${{ secrets.NAS_SSH_KEY }}
+        run: |
+          echo "$SSH_KEY" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+
+          ssh -i /tmp/deploy_key \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=30 \
+            -o ProxyCommand="cloudflared access tcp --hostname ssh.marcuslchong.com" \
+            ${{ secrets.NAS_USER }}@ssh.marcuslchong.com << 'ENDSSH'
+          set -e
+          cd /nfs/keribakes
+          git pull origin main
+          docker compose up -d --build
+          docker image prune -f
+          echo "✓ Deploy complete"
+          ENDSSH
+
+          rm /tmp/deploy_key
