@@ -159,11 +159,11 @@ Astro's `<Image>` component from `astro:assets`.
 Open Graph and Twitter Card meta tags are injected globally in `src/layouts/Layout.astro`.
 Every page gets the same preview image; title and description follow the per-page props.
 
-- **OG image:** `public/images/about/profile-4.jpg` — served at the absolute URL
-  `https://keribakes.com/images/about/profile-4.jpg`
+- **OG image:** `public/images/about/profile-4.jpeg` — served at the absolute URL
+  `https://keribakes.com/images/about/profile-4.jpeg`
 - `astro.config.mjs` has `site: 'https://keribakes.com'` so `Astro.site` resolves
   the absolute base at build time
-- To swap the preview photo: replace `public/images/about/profile-4.jpg` with a
+- To swap the preview photo: replace `public/images/about/profile-4.jpeg` with a
   new image (1200×630px minimum recommended; square 1200×1200 also works well)
 - Do **not** hardcode `https://keribakes.com` in the meta tags — always derive it
   from `Astro.site` so staging/preview deployments don't leak the production URL
